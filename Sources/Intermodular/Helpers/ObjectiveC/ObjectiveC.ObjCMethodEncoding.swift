@@ -5,7 +5,7 @@
 import ObjectiveC
 import Swallow
 
-public enum ObjCMethodEncoding: UnicodeScalar, Hashable2 {
+public enum ObjCMethodEncoding: UnicodeScalar, opaque_Hashable, Hashable {
     case constant = "r"
     case `in` = "n"
     case `inout` = "N"

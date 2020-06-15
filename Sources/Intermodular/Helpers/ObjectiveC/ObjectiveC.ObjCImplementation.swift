@@ -5,7 +5,7 @@
 import ObjectiveC
 import Swallow
 
-public struct ObjCImplementation: ImplementationForwardingMutableWrapper, Hashable2 {
+public struct ObjCImplementation: opaque_Hashable, Hashable, ImplementationForwardingMutableWrapper {
     public typealias Value = IMP
     
     public var value: Value
@@ -26,7 +26,7 @@ extension ObjCImplementation {
                 .or(try! removeBlock())
         }
     }
-
+    
     @inlinable
     public init?(block: ObjCBlock) {
         self.init(imp_implementationWithBlock(block.value))
