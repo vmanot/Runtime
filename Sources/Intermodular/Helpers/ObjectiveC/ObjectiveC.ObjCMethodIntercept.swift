@@ -93,8 +93,8 @@ extension ObjCClass {
 
         try prepareForImplementationVirtualizationIfNecessary()
 
-        try replaceIfNecessary(
-            methodNamed: selector,
+        try replaceMethodIfNecessary(
+            named: selector,
             with: .init { invocation in
                 invocation.selector = ObjCSelector(invocation.selector)
                     .taggedAsIntercepted()
