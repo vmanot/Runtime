@@ -77,7 +77,6 @@ extension ObjCMethodInvocation {
 
             nsInvocation.getArgument(buffer.baseAddress!, atIndex: index)
 
-
             arguments += AnyObjCCodable(decodingObjCValueFromRawBuffer: buffer.baseAddress, encoding: type)
 
             buffer.deallocate()

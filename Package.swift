@@ -17,11 +17,19 @@ let package = Package(
         .package(url: "git@github.com:vmanot/Compute.git", .branch("master")),
         .package(url: "git@github.com:vmanot/FoundationX.git", .branch("master")),
         .package(url: "git@github.com:vmanot/LinearAlgebra.git", .branch("master")),
-        .package(url: "git@github.com:vmanot/POSIX.git", .branch("master")),
         .package(url: "git@github.com:vmanot/Swallow.git", .branch("master"))
     ],
     targets: [
-        .target(name: "Runtime", dependencies: ["Compute", "FoundationX", "LinearAlgebra", "POSIX", "Swallow"], path: "Sources")
+        .target(
+            name: "Runtime",
+            dependencies: [
+                "Compute",
+                "FoundationX",
+                "LinearAlgebra",
+                "Swallow"
+            ],
+            path: "Sources"
+        )
     ],
     swiftLanguageVersions: [
         .version("5.1")

@@ -15,13 +15,13 @@ public struct ObjCRuntime {
 }
 
 extension ObjCRuntime {
-    static let _libobjcHandle = try! POSIXDynamicLibraryHandle.open(at: "/usr/lib/libobjc.A.dylib", .now)
-
-    static var _objc_msgForward_stret: ObjCImplementation = {
-        return .init(unsafeBitCast(_libobjcHandle.rawSymbolAddress(forName: "_objc_msgForward_stret"), to: IMP.self))
-    }()
-
+    static let _libobjcHandle = dlopen("/usr/lib/libobjc.A.dylib", RTLD_NOW)
+    
     static var _objc_msgForward: ObjCImplementation = {
-        return .init(unsafeBitCast(_libobjcHandle.rawSymbolAddress(forName: "_objc_msgForward"), to: IMP.self))
+        .init(unsafeBitCast(dlsym(_libobjcHandle, "_objc_msgForward"), to: IMP.self))
+    }()
+    
+    static var _objc_msgForward_stret: ObjCImplementation = {
+        .init(unsafeBitCast(dlsym(_libobjcHandle, "_objc_msgForward_stret"), to: IMP.self))
     }()
 }
