@@ -28,7 +28,10 @@ let package = Package(
                 "LinearAlgebra",
                 "Swallow"
             ],
-            path: "Sources"
+            path: "Sources",
+            swiftSettings: [
+                .unsafeFlags(["-Onone"])
+            ]
         )
     ],
     swiftLanguageVersions: [
