@@ -25,7 +25,7 @@ extension ObjCMethod {
             description.signature.value
         )
 
-        try! classAddMethodResult.throwSelfIfFalse()
+        try! classAddMethodResult.orThrow()
         self = cls[methodNamed: description.name]!
         cls.dispose()
     }

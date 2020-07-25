@@ -4,7 +4,6 @@
 
 import ObjectiveC
 import Swallow
-import Swift
 
 public func getSwiftObjectBaseSuperclass() -> AnyClass {
     class Temp { }

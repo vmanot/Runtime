@@ -4,7 +4,6 @@
 
 import ObjectiveC
 import Swallow
-import Swift
 
 extension OpaqueExistentialContainer {
     public struct Buffer: MutableWrapper, Trivial {

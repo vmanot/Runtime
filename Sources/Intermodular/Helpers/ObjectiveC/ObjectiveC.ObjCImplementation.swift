@@ -35,7 +35,7 @@ extension ObjCImplementation {
     @discardableResult
     public func removeBlock() throws -> ObjCBlock? {
         let result = blockView
-        try imp_removeBlock(value).throwSelfIfFalse()
+        try imp_removeBlock(value).orThrow()
         return result
     }
 }

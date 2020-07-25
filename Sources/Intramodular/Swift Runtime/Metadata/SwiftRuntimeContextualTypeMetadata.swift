@@ -4,7 +4,6 @@
 
 import ObjectiveC
 import Swallow
-import Swift
 
 extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualTypeMetadataLayout {
     var isGeneric: Bool {
@@ -57,19 +56,21 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
             .advanced()
         let genericVector = genericArgumentVector()
         
-        return (0..<numberOfFields()).map { i in
+        return (0..<numberOfFields()).map { index in
             let record = fieldDescriptor
                 .pointee
                 .fields
-                .element(at: i)
+                .element(at: index)
             
             return NominalTypeMetadata.Field(
                 name: record.pointee.fieldName(),
-                type: TypeMetadata(record.pointee.type(
-                    genericContext: metadata.pointee.contextDescriptor,
-                    genericArguments: genericVector)
+                type: TypeMetadata(
+                    record.pointee.type(
+                        genericContext: metadata.pointee.contextDescriptor,
+                        genericArguments: genericVector
+                    )
                 ),
-                offset: offsets[i]
+                offset: offsets[index]
             )
         }
     }

@@ -6,22 +6,22 @@ import Swallow
 
 public struct AnyNominalOrTupleValue: FailableWrapper {
     public typealias Value = Any
-
+    
     public var value: Value
-
+    
     public var valueType: TypeMetadata.NominalOrTuple {
         return TypeMetadata.NominalOrTuple(type(of: value))!
     }
-
+    
     public init(unchecked value: Value) {
         self.value = value
     }
-
+    
     public init?(_ value: Value) {
         guard let _ = TypeMetadata.NominalOrTuple(unsafeBitCast(value, to: OpaqueExistentialContainer.self).type.value) else {
             return nil
         }
-
+        
         self.init(unchecked: value)
     }
 }
@@ -37,11 +37,11 @@ extension AnyNominalOrTupleValue: CustomStringConvertible {
 extension AnyNominalOrTupleValue: KeyExposingMutableDictionaryProtocol {
     public typealias DictionaryKey = String
     public typealias DictionaryValue = Any
-
+    
     public var keys: [String] {
         return valueType.fields.map({ $0.name })
     }
-
+    
     public subscript(_ key: String) -> Any? {
         get {
             return valueType
@@ -59,19 +59,19 @@ extension AnyNominalOrTupleValue: KeyExposingMutableDictionaryProtocol {
 
 extension AnyNominalOrTupleValue: RandomAccessCollection {
     public typealias Index = Int
-
+    
     public var startIndex: Index {
         return valueType.fields.startIndex
     }
-
+    
     public var endIndex: Index {
         return valueType.fields.endIndex
     }
-
+    
     public subscript(index: Index) -> Any {
         get {
             let field = valueType.fields[index]
-
+            
             return OpaqueExistentialContainer.withUnretainedValue(value) {
                 $0.withUnsafeBytes { bytes in
                     OpaqueExistentialContainer(copyingBytesOfValueAt: (bytes.baseAddress! + field.offset), type: field.type).unretainedValue
@@ -79,6 +79,7 @@ extension AnyNominalOrTupleValue: RandomAccessCollection {
             }
         } set {
             let field = valueType.fields[index]
+            
             OpaqueExistentialContainer.withUnretainedValue(&value) {
                 $0.withUnsafeMutableBytes { bytes in
                     OpaqueExistentialContainer.withUnretainedValue(newValue) {
