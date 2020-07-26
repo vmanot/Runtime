@@ -19,14 +19,16 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
     }
     
     func fieldOffsets() -> [Int] {
-        return metadata.pointee.contextDescriptor
+        return metadata
+            .pointee
+            .contextDescriptor
             .pointee
             .fieldOffsetVectorOffset
-            .vector(metadata: basePointer, count: numberOfFields())
+            .vector(metadata: basePointer.assumingMemoryBound(to: Int.self), count: numberOfFields())
             .map(numericCast)
     }
     
-    func genericArguments() -> UnsafeMutableBufferPointer<Any.Type> {
+    func genericArguments() -> UnsafeBufferPointer<Any.Type> {
         guard isGeneric else {
             return .init(start: nil, count: 0)
         }
@@ -39,10 +41,10 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
             .base
             .numberOfParams
         
-        return UnsafeMutableBufferPointer(start: genericArgumentVector(), count: count)
+        return UnsafeBufferPointer(start: genericArgumentVector(), count: count)
     }
     
-    func genericArgumentVector() -> UnsafeMutablePointer<Any.Type> {
+    func genericArgumentVector() -> UnsafePointer<Any.Type> {
         return basePointer
             .assumingMemoryBound(to: UnsafeRawPointer.self)
             .advanced(by: metadata.pointee.genericArgumentOffset)
@@ -54,6 +56,7 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
         let fieldDescriptor = metadata.pointee.contextDescriptor.pointee
             .fieldDescriptor
             .advanced()
+        
         let genericVector = genericArgumentVector()
         
         return (0..<numberOfFields()).map { index in

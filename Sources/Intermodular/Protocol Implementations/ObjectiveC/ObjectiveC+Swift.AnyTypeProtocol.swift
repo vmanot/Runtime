@@ -27,6 +27,12 @@ extension ObjCClass: NominalTypeMetadataProtocol {
     }
     
     public var fields: [NominalTypeMetadata.Field] {
-        return instanceVariables.map({ .init(name: $0.name, type: .init($0.typeEncoding.toMetatype()), offset: $0.offset) })
+        return instanceVariables.map {
+            .init(
+                name: $0.name,
+                type: .init($0.typeEncoding.toMetatype()),
+                offset: $0.offset
+            )
+        }
     }
 }

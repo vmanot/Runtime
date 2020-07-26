@@ -17,8 +17,8 @@ struct SwiftRuntimeTypeMetadata<MetadataLayout: SwiftRuntimeTypeMetadataLayout>:
         self.base = base
     }
     
-    var basePointer: UnsafeMutablePointer<Int> {
-        return unsafeBitCast(base, to: UnsafeMutablePointer<Int>.self)
+    var basePointer: UnsafeRawPointer {
+        return unsafeBitCast(base, to: UnsafeRawPointer.self)
     }
     
     var metadata: UnsafePointer<MetadataLayout> {

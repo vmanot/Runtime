@@ -6,21 +6,23 @@ import ObjectiveC
 import Swallow
 
 extension OpaqueExistentialContainer {
+    @frozen
     public struct Buffer: MutableWrapper, Trivial {
         public typealias Value = (UnsafeMutableRawPointer?, UnsafeMutableRawPointer?, UnsafeMutableRawPointer?)
-
+        
         public var value: Value
-
+        
         public init(_ value: Value) {
             self.value = value
         }
-
+        
         public init() {
             value = (nil, nil, nil)
         }
     }
 }
 
+@frozen
 public struct OpaqueExistentialContainer: CustomDebugStringConvertible {
     public static var headerSize: Int {
         if CPU.Architecture.is64Bit {
@@ -37,7 +39,7 @@ public struct OpaqueExistentialContainer: CustomDebugStringConvertible {
         self.buffer = buffer
         self.type = type
     }
-
+    
     public init(unitialized type: TypeMetadata) {
         self.init(buffer: .init(), type: type)
     }
@@ -58,12 +60,12 @@ extension OpaqueExistentialContainer: MutableContiguousStorage {
     public typealias Element = Byte
     
     public func withBufferPointer<BP: InitiableBufferPointer, T>(_ body: ((BP) throws -> T)) rethrows -> T where Element == BP.Element {
-        return try trivialRepresentation
-            .readOnly
-            .value
-            .withMutableBufferPointer(body)
+        var container = self
+        
+        return try container.withMutableBufferPointer({ try body($0) })
     }
     
+    @_transparent
     public mutating func withMutableBufferPointer<BP: InitiableBufferPointer, T>(_ body: ((BP) throws -> T)) rethrows -> T where Element == BP.Element {
         let result: T
         
@@ -91,7 +93,7 @@ extension OpaqueExistentialContainer: ObjCCodable {
     
     public init(decodingObjCValueFromRawBuffer buffer: UnsafeMutableRawPointer?, encoding: ObjCTypeEncoding) {
         let type = TypeMetadata(encoding.toMetatype())
-
+        
         if let buffer = buffer {
             if let type = type.value as? ObjCCodable.Type {
                 let value: Any = type.init(decodingObjCValueFromRawBuffer: buffer, encoding: encoding)
@@ -101,6 +103,7 @@ extension OpaqueExistentialContainer: ObjCCodable {
             }
         } else {
             assert(encoding.isSizeZero)
+            
             self.init(unitialized: type)
         }
     }
@@ -116,7 +119,7 @@ extension OpaqueExistentialContainer: ObjCCodable {
             return createRawCopy().baseAddress!
         }
     }
-
+    
     public func deinitializeRawObjCValueBuffer(_ buffer: UnsafeMutableRawPointer) {
         if type.value is AnyClass {
             buffer.assumingMemoryBound(to: AnyObject.self).deinitialize(count: 1)

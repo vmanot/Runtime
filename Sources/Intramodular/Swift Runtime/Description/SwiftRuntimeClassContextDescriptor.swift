@@ -4,6 +4,7 @@
 
 import Swift
 
+@usableFromInline
 struct SwiftRuntimeClassContextDescriptor: SwiftRuntimeContextDescriptor {
     var flags: Int32
     var parent: Int32
@@ -15,14 +16,18 @@ struct SwiftRuntimeClassContextDescriptor: SwiftRuntimeContextDescriptor {
     var metadataPositiveSizeInWords: Int32
     var numImmediateMembers: Int32
     var numberOfFields: Int32
-    var fieldOffsetVectorOffset: SwiftRuntimeUnsafeRelativeVectorPointer<Int32, Int32>
+    var fieldOffsetVectorOffset: SwiftRuntimeUnsafeRelativeVectorPointer<Int32, Int>
     var genericContextHeader: TargetTypeGenericContextDescriptorHeader
 }
 
 extension SwiftRuntimeClassContextDescriptor {
+    @frozen
+    @usableFromInline
     struct NegativeSizeAndBoundsUnion {
+        @usableFromInline
         var rawValue: Int32
         
+        @usableFromInline
         var metadataNegativeSizeInWords: Int32 {
             return rawValue
         }

@@ -4,13 +4,18 @@
 
 import Swallow
 
+@frozen
 public struct SwiftRuntimeUnsafeRelativePointer<Offset: BinaryInteger, Pointee> {
     public var offset: Offset
     
+    @_optimize(none)
+    @_transparent
     public mutating func pointee() -> Pointee {
         return advanced().pointee
     }
     
+    @_optimize(none)
+    @_transparent
     public mutating func advanced() -> UnsafeMutablePointer<Pointee> {
         let offsetCopy = self.offset
         return withUnsafePointer(to: &self) {
@@ -23,13 +28,16 @@ public struct SwiftRuntimeUnsafeRelativePointer<Offset: BinaryInteger, Pointee> 
     }
 }
 
+@frozen
 public struct SwiftRuntimeUnsafeRelativeVectorPointer<Offset: BinaryInteger, Pointee> {
     public var offset: Offset
     
+    @_optimize(none)
+    @_transparent
     public mutating func vector<N: BinaryInteger>(metadata: UnsafePointer<Int>, count: N) -> [Pointee] {
         return .init(
             metadata
-                .advanced(by: Int(offset))
+                .advanced(by: numericCast(offset))
                 .rawRepresentation
                 .assumingMemoryBound(to: Pointee.self)
                 .buffer(withCount: Int(count))

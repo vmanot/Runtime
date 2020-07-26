@@ -9,7 +9,7 @@ public struct AnyNominalOrTupleValue: FailableWrapper {
     
     public var value: Value
     
-    public var valueType: TypeMetadata.NominalOrTuple {
+    public var typeMetadata: TypeMetadata.NominalOrTuple {
         return TypeMetadata.NominalOrTuple(type(of: value))!
     }
     
@@ -18,7 +18,7 @@ public struct AnyNominalOrTupleValue: FailableWrapper {
     }
     
     public init?(_ value: Value) {
-        guard let _ = TypeMetadata.NominalOrTuple(unsafeBitCast(value, to: OpaqueExistentialContainer.self).type.value) else {
+        guard let _ = TypeMetadata.NominalOrTuple(type(of: value)) else {
             return nil
         }
         
@@ -35,58 +35,54 @@ extension AnyNominalOrTupleValue: CustomStringConvertible {
 }
 
 extension AnyNominalOrTupleValue: KeyExposingMutableDictionaryProtocol {
-    public typealias DictionaryKey = String
-    public typealias DictionaryValue = Any
-    
-    public var keys: [String] {
-        return valueType.fields.map({ $0.name })
+    public var keys: [AnyStringKey] {
+        return typeMetadata.fields.map({ .init(stringValue: $0.name) })
     }
     
-    public subscript(_ key: String) -> Any? {
+    public subscript(_ key: AnyStringKey) -> Any? {
         get {
-            return valueType
+            return typeMetadata
                 .fields
-                .index(of: { $0.name == key })
+                .index(of: { $0.name == key.stringValue })
                 .map({ self[$0] })
         } set {
-            valueType
+            typeMetadata
                 .fields
-                .index(of: { $0.name == key })
+                .index(of: { $0.name == key.stringValue })
                 .map({ self[$0] = try! newValue.unwrap() })
         }
     }
 }
 
-extension AnyNominalOrTupleValue: RandomAccessCollection {
-    public typealias Index = Int
+extension AnyNominalOrTupleValue: Sequence {
+    public typealias Element = (key: AnyStringKey, value: Any)
     
-    public var startIndex: Index {
-        return valueType.fields.startIndex
-    }
-    
-    public var endIndex: Index {
-        return valueType.fields.endIndex
-    }
-    
-    public subscript(index: Index) -> Any {
+    public subscript(index: Int) -> Any {
         get {
-            let field = valueType.fields[index]
+            let field = typeMetadata.fields[index]
             
             return OpaqueExistentialContainer.withUnretainedValue(value) {
                 $0.withUnsafeBytes { bytes in
-                    OpaqueExistentialContainer(copyingBytesOfValueAt: (bytes.baseAddress! + field.offset), type: field.type).unretainedValue
+                    field.type.opaqueExistentialInterface.copyValue(
+                        from: bytes.baseAddress?.advanced(by: field.offset)
+                    )
                 }
             }
         } set {
-            let field = valueType.fields[index]
+            let field = typeMetadata.fields[index]
             
             OpaqueExistentialContainer.withUnretainedValue(&value) {
                 $0.withUnsafeMutableBytes { bytes in
-                    OpaqueExistentialContainer.withUnretainedValue(newValue) {
-                        $0.reintializeValue(at: bytes.baseAddress?.advanced(by: field.offset))
-                    }
+                    field.type.opaqueExistentialInterface.reinitializeValue(
+                        at: bytes.baseAddress?.advanced(by: field.offset),
+                        to: newValue
+                    )
                 }
             }
         }
+    }
+    
+    public func makeIterator() -> AnyIterator<Element> {
+        AnyIterator(keys.lazy.map(({ ($0, self[$0]!) })).makeIterator())
     }
 }

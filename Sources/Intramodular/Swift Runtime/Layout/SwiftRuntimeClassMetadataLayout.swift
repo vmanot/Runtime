@@ -14,14 +14,14 @@ struct SwiftRuntimeClassMetadataLayout: SwiftRuntimeContextualTypeMetadataLayout
     var objCRuntimeReserve2: Int
     var rodataPointer: Int
     var classFlags: Int32
-    var instanceAddressPoint: Int32
-    var instanceSize: Int32
-    var instanceAlignmentMask: Int16
-    var runtimeReserveField: Int16
-    var classObjectSize: Int32
-    var classObjectAddressPoint: Int32
+    var instanceAddressPoint: UInt32
+    var instanceSize: UInt32
+    var instanceAlignmentMask: UInt16
+    var runtimeReserveField: UInt16
+    var classObjectSize: UInt32
+    var classObjectAddressPoint: UInt32
     var contextDescriptor: UnsafeMutablePointer<ContextDescriptor>
-    var genericParameterVector: SwiftRuntimeUnsafeRelativeVectorPointer<Int32, Any.Type>
+    var ivarDestroyer: UnsafeRawPointer
     
     public var kind: Int {
         isaPointer

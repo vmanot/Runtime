@@ -37,7 +37,9 @@ extension UnmanagedProtocol {
 
     public static func passRetained(_ value: Instance) -> Self {
         let result = passUnretained(value)
+        
         _ = result.retain()
+        
         return result
     }
 
@@ -45,11 +47,17 @@ extension UnmanagedProtocol {
         return try body(.passUnretained(value))
     }
 
+    public static func withRetainedValue<Result>(_ value: Instance, _ body: ((Self) throws -> Result)) rethrows -> Result {
+        return try body(.passRetained(value))
+    }
+
     public static func withUnretainedValue<Result>(_ value: inout Instance, _ body: ((inout Self) throws -> Result)) rethrows -> Result {
         var unmanaged = passUnretained(value)
+        
         defer {
             value = unmanaged.takeUnretainedValue()
         }
+        
         return try body(&unmanaged)
     }
 

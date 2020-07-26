@@ -4,14 +4,15 @@
 
 import Swallow
 
-fileprivate protocol OpaqueExistentialContainerInterface {
+protocol OpaqueExistentialContainerInterface {
 
 }
 
 extension OpaqueExistentialContainerInterface {
-    fileprivate static func retainValue(at address: UnsafeRawPointer?) {
+    static func retainValue(at address: UnsafeRawPointer?) {
         if let address = address {
             let buffer = UnsafeMutablePointer<Self>.allocate(capacity: 1)
+            
             buffer.initialize(to: address.assumingMemoryBound(to: Self.self).pointee)
             buffer.deallocate()
         } else {
@@ -19,30 +20,34 @@ extension OpaqueExistentialContainerInterface {
         }
     }
 
-    fileprivate static func withUnsafeBytesOfValue<T>(of value: Any, _ body: ((UnsafeRawBufferPointer) throws -> T)) rethrows -> T {
+    static func withUnsafeBytesOfValue<T>(of value: Any, _ body: ((UnsafeRawBufferPointer) throws -> T)) rethrows -> T {
         var _value = value as! Self
         return try withUnsafeBytes(of: &_value, body)
     }
 
-    fileprivate static func withUnsafeMutableBytesOfValue<T>(of value: inout Any, _ body: ((UnsafeMutableRawBufferPointer) throws -> T)) rethrows -> T {
+    static func withUnsafeMutableBytesOfValue<T>(of value: inout Any, _ body: ((UnsafeMutableRawBufferPointer) throws -> T)) rethrows -> T {
         var _value = value as! Self
+        
         defer {
             value = _value
         }
+        
         return try withUnsafeMutableBytes(of: &_value, body)
     }
     
-    fileprivate static func copyValue(from address: UnsafeRawPointer?) -> Any {
+    static func copyValue(from address: UnsafeRawPointer?) -> Any {
         if let address = address {
             return address.assumingMemoryBound(to: Self.self).pointee
         } else {
             let type = TypeMetadata(self)
+            
             assert(type.isSizeZero)
+            
             return OpaqueExistentialContainer(unitialized: type)
         }
     }
 
-    fileprivate static func assignValue(_ value: Any, to address: UnsafeMutableRawPointer?) {
+    static func assignValue(_ value: Any, to address: UnsafeMutableRawPointer?) {
         if let address = address {
             address.assumingMemoryBound(to: self).assign(to: value as! Self)
         } else {
@@ -50,7 +55,7 @@ extension OpaqueExistentialContainerInterface {
         }
     }
 
-    fileprivate static func initializeValue(at address: UnsafeMutableRawPointer?, to value: Any) {
+    static func initializeValue(at address: UnsafeMutableRawPointer?, to value: Any) {
         if let address = address {
             address.assumingMemoryBound(to: self).initialize(to: value as! Self)
         } else {
@@ -58,7 +63,7 @@ extension OpaqueExistentialContainerInterface {
         }
     }
 
-    fileprivate static func reinitializeValue(at address: UnsafeMutableRawPointer?, to value: Any) {
+    static func reinitializeValue(at address: UnsafeMutableRawPointer?, to value: Any) {
         if let address = address {
             address.assumingMemoryBound(to: self).reinitialize(to: value as! Self)
         } else {
@@ -66,11 +71,11 @@ extension OpaqueExistentialContainerInterface {
         }
     }
 
-    fileprivate static func writeValue(_ value: Any, to address: UnsafeMutableRawPointer) {
+    static func writeValue(_ value: Any, to address: UnsafeMutableRawPointer) {
         address.assumingMemoryBound(to: Self.self).pointee = value as! Self
     }
 
-    fileprivate static func deinitializeValue(at address: UnsafeMutableRawPointer) {
+    static func deinitializeValue(at address: UnsafeMutableRawPointer) {
         address.assumingMemoryBound(to: self).deinitialize(count: 1)
     }
 }
@@ -81,9 +86,10 @@ extension OpaqueExistentialContainer {
     public init<ByteAddress: RawPointer>(copyingBytesOfValueAt address: ByteAddress?, type: TypeMetadata) {
         if type.memoryLayout.size == 0 {
             assert(address == nil)
+            
             self.init(unitialized: type)
         } else {
-            self = .passUnretained(type.opaqueExistentialInterface.copyValue(from: address!.rawRepresentation) )
+            self = .passUnretained(type.opaqueExistentialInterface.copyValue(from: address!.rawRepresentation))
         }
     }
 
@@ -184,7 +190,7 @@ extension OpaqueExistentialContainer: UnmanagedProtocol {
 }
 
 extension TypeMetadata {
-    fileprivate var opaqueExistentialInterface: OpaqueExistentialContainerInterface.Type {
+    var opaqueExistentialInterface: OpaqueExistentialContainerInterface.Type {
         struct ProtocolTypeContainer {
             let type: Any.Type
             let witnessTable: Int
