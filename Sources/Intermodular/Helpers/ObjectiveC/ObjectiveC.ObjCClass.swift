@@ -230,13 +230,18 @@ extension ObjCClass: Named, NameInitiable {
         return .init(utf8String: class_getName(value))
     }
     
-    public init(name: String) {
+    public init(name: String, superclass: ObjCClass, extraByteCount: Int = 0) {
         if let value = objc_getClass(name) as? AnyClass {
             self.init(value)
         } else {
-            self.init(objc_allocateClassPair(Object.self, name, 0)!)
+            self.init(objc_allocateClassPair(superclass.value, name, extraByteCount)!)
+            
             register()
         }
+    }
+    
+    public init(name: String) {
+        self.init(name: name, superclass: ObjCClass(Object.self))
     }
 }
 
