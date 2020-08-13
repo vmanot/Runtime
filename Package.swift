@@ -16,7 +16,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vmanot/Compute.git", .branch("master")),
         .package(url: "https://github.com/vmanot/FoundationX.git", .branch("master")),
-        .package(url: "https://github.com/vmanot/LinearAlgebra.git", .branch("master")),
         .package(url: "https://github.com/vmanot/Swallow.git", .branch("master"))
     ],
     targets: [
@@ -25,7 +24,6 @@ let package = Package(
             dependencies: [
                 "Compute",
                 "FoundationX",
-                "LinearAlgebra",
                 "Swallow"
             ],
             path: "Sources",
