@@ -6,12 +6,12 @@ import Swallow
 
 public protocol UnmanagedProtocol {
     associatedtype Instance
-
+    
     static func passUnretained(_ value: Instance) -> Self
-
+    
     func takeUnretainedValue() -> Instance
     func takeRetainedValue() -> Instance
-
+    
     func retain() -> Self
     func release()
 }
@@ -26,7 +26,7 @@ extension UnmanagedProtocol {
             self = .passUnretained(newValue)
         }
     }
-
+    
     public var retainedValue: Instance {
         get {
             return takeRetainedValue()
@@ -34,7 +34,7 @@ extension UnmanagedProtocol {
             self = .passRetained(newValue)
         }
     }
-
+    
     public static func passRetained(_ value: Instance) -> Self {
         let result = passUnretained(value)
         
@@ -42,15 +42,15 @@ extension UnmanagedProtocol {
         
         return result
     }
-
+    
     public static func withUnretainedValue<Result>(_ value: Instance, _ body: ((Self) throws -> Result)) rethrows -> Result {
         return try body(.passUnretained(value))
     }
-
+    
     public static func withRetainedValue<Result>(_ value: Instance, _ body: ((Self) throws -> Result)) rethrows -> Result {
         return try body(.passRetained(value))
     }
-
+    
     public static func withUnretainedValue<Result>(_ value: inout Instance, _ body: ((inout Self) throws -> Result)) rethrows -> Result {
         var unmanaged = passUnretained(value)
         
@@ -60,7 +60,7 @@ extension UnmanagedProtocol {
         
         return try body(&unmanaged)
     }
-
+    
     public func takeRetainedValue() -> Any {
         _ = retain()
         return takeUnretainedValue()
@@ -70,5 +70,5 @@ extension UnmanagedProtocol {
 // MARK: - Implementation -
 
 extension Unmanaged: UnmanagedProtocol {
-
+    
 }
