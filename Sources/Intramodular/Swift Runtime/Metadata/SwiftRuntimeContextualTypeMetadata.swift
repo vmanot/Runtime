@@ -5,6 +5,8 @@
 import ObjectiveC
 import Swallow
 
+private final class _DummyClass { }
+
 extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualTypeMetadataLayout {
     var isGeneric: Bool {
         (metadata.pointee.contextDescriptor.pointee.flags & 0x80) != 0
@@ -15,10 +17,18 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
     }
     
     func numberOfFields() -> Int {
-        Int(metadata.pointee.contextDescriptor.pointee.numberOfFields)
+        guard base != class_getSuperclass(_DummyClass.self) else {
+            return 0
+        }
+        
+        return Int(metadata.pointee.contextDescriptor.pointee.numberOfFields)
     }
     
     func fieldOffsets() -> [Int] {
+        guard base != class_getSuperclass(_DummyClass.self) else {
+            return []
+        }
+        
         return metadata
             .pointee
             .contextDescriptor

@@ -17,17 +17,23 @@ public struct NominalMirror<Subject>: MirrorType {
         AnyNominalOrTupleMirror(self).children
     }
     
+    public var allChildren: AnyNominalOrTupleMirror.AllChildren {
+        AnyNominalOrTupleMirror(self).allChildren
+    }
+    
     private init(subject: Subject, typeMetadata: TypeMetadata.NominalOrTuple) {
         self.subject = subject
         self.typeMetadata = typeMetadata
     }
-    
+}
+
+// MARK: - API -
+
+extension NominalMirror {
     public init(reflecting subject: Subject) {
         self.init(subject: subject, typeMetadata: .of(subject))
     }
-}
 
-extension NominalMirror {
     public subscript<T>(keyPath keyPath: KeyPath<Subject, T>) -> T{
         subject[keyPath: keyPath]
     }

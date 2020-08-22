@@ -11,8 +11,11 @@ public protocol _opaque_TypeMetadataType: _opaque_Hashable {
     init?(_ base: Any.Type)
 }
 
+/// A `TypeMetadata`-like type.
 public protocol TypeMetadataType: _opaque_TypeMetadataType, Hashable {
     var base: Any.Type { get }
+    
+    /// The supertype of this type, if any.
     var supertypeMetadata: Self? { get }
     
     init(_unsafe base: Any.Type)
@@ -20,12 +23,18 @@ public protocol TypeMetadataType: _opaque_TypeMetadataType, Hashable {
 }
 
 public protocol _opaque_NominalTypeMetadataType: _opaque_TypeMetadataType {
+    /// The mangled name of this type.
     var mangledName: String { get }
+    
+    /// The field layout of this type.
     var fields: [NominalTypeMetadata.Field] { get }
 }
 
+/// A `NominalTypeMetadata`-like type.
 public protocol NominalTypeMetadataType: _opaque_NominalTypeMetadataType, CustomStringConvertible, TypeMetadataType {
     var mangledName: String { get }
+    
+    var supertypeFields: [NominalTypeMetadata.Field]? { get }
     var fields: [NominalTypeMetadata.Field] { get }
 }
 
@@ -61,10 +70,22 @@ extension TypeMetadataType {
     }
 }
 
+extension NominalTypeMetadataType {
+    public var supertypeFields: [NominalTypeMetadata.Field]? {
+        supertypeMetadata?.fields
+    }
+}
+
 // MARK: - Extensions -
 
 extension TypeMetadataType {
     public static func of<T>(_ value: T) -> Self {
         Self(type(of: value as Any))!
+    }
+}
+
+extension NominalTypeMetadataType {
+    public var allFields: [NominalTypeMetadata.Field] {
+        (supertypeMetadata?.allFields ?? []) + fields
     }
 }

@@ -96,9 +96,18 @@ extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
 extension AnyNominalOrTupleMirror: Sequence {
     public typealias Element = (key: AnyStringKey, value: Any)
     public typealias Children = AnySequence<Element>
-    
+    public typealias AllChildren = AnySequence<Element>
+
     public var children: Children {
         .init(self)
+    }
+    
+    public var allChildren: Children {
+        guard let supertypeMirror = supertypeMirror else {
+            return children
+        }
+        
+        return .init(supertypeMirror.children.join(children))
     }
     
     public func makeIterator() -> AnyIterator<Element> {
