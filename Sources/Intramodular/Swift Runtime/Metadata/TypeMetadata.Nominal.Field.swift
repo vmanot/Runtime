@@ -10,6 +10,10 @@ extension TypeMetadata.Nominal {
         public let type: TypeMetadata
         public let offset: Int
         
+        public var key: AnyStringKey {
+            .init(stringValue: name)
+        }
+        
         public init(name: String, type: TypeMetadata, offset: Int) {
             self.name = name
             self.type = type

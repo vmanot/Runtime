@@ -53,10 +53,8 @@ extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
         typeMetadata.fields.map({ .init(stringValue: $0.name) })
     }
     
-    public subscript(index: Int) -> Any {
+    public subscript(field: NominalTypeMetadata.Field) -> Any {
         get {
-            let field = typeMetadata.fields[index]
-            
             return OpaqueExistentialContainer.withUnretainedValue(value) {
                 $0.withUnsafeBytes { bytes in
                     field.type.opaqueExistentialInterface.copyValue(
@@ -65,8 +63,6 @@ extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
                 }
             }
         } set {
-            let field = typeMetadata.fields[index]
-            
             OpaqueExistentialContainer.withUnretainedValue(&value) {
                 $0.withUnsafeMutableBytes { bytes in
                     field.type.opaqueExistentialInterface.reinitializeValue(
@@ -81,13 +77,13 @@ extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
     public subscript(_ key: AnyStringKey) -> Any? {
         get {
             return typeMetadata
-                .fields
-                .index(of: { $0.name == key.stringValue })
+                .allFields
+                .first(where: { $0.key == key })
                 .map({ self[$0] })
         } set {
             typeMetadata
-                .fields
-                .index(of: { $0.name == key.stringValue })
+                .allFields
+                .first(where: { $0.key == key })
                 .map({ self[$0] = try! newValue.unwrap() })
         }
     }
@@ -97,7 +93,7 @@ extension AnyNominalOrTupleMirror: Sequence {
     public typealias Element = (key: AnyStringKey, value: Any)
     public typealias Children = AnySequence<Element>
     public typealias AllChildren = AnySequence<Element>
-
+    
     public var children: Children {
         .init(self)
     }
