@@ -22,6 +22,12 @@ extension ObjCTypeEncoding: MetatypeRepresentable {
 }
 
 extension ObjCClass: NominalTypeMetadataType {
+    public var isSwiftObject: Bool {
+        final class _DummyClass { }
+        
+        return base == class_getSuperclass(_DummyClass.self)
+    }
+    
     public var base: Any.Type {
         value
     }
@@ -31,6 +37,10 @@ extension ObjCClass: NominalTypeMetadataType {
     }
     
     public var fields: [NominalTypeMetadata.Field] {
+        guard !isSwiftObject else {
+            return []
+        }
+        
         return instanceVariables.map {
             .init(
                 name: $0.name,

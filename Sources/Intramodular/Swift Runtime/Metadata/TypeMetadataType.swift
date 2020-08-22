@@ -79,6 +79,10 @@ extension NominalTypeMetadataType {
 // MARK: - Extensions -
 
 extension TypeMetadataType {
+    public var isSwiftObject: Bool {
+        ObjCClass(base)?.isSwiftObject ?? false
+    }
+    
     public static func of<T>(_ value: T) -> Self {
         Self(type(of: value as Any))!
     }

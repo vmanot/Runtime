@@ -5,8 +5,6 @@
 import ObjectiveC
 import Swallow
 
-private final class _DummyClass { }
-
 extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualTypeMetadataLayout {
     @usableFromInline
     var isGeneric: Bool {
@@ -20,7 +18,7 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
     
     @usableFromInline
     func numberOfFields() -> Int {
-        guard base != class_getSuperclass(_DummyClass.self) else {
+        guard !TypeMetadata(base).isSwiftObject else {
             return 0
         }
         
@@ -29,7 +27,7 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
     
     @usableFromInline
     func fieldOffsets() -> [Int] {
-        guard base != class_getSuperclass(_DummyClass.self) else {
+        guard !TypeMetadata(base).isSwiftObject else {
             return []
         }
         
@@ -69,7 +67,7 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
     
     @usableFromInline
     var fields: [NominalTypeMetadata.Field] {
-        guard base != class_getSuperclass(_DummyClass.self) else {
+        guard !TypeMetadata(base).isSwiftObject else {
             return []
         }
         

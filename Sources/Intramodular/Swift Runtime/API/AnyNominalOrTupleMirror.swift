@@ -81,10 +81,9 @@ extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
                 .first(where: { $0.key == key })
                 .map({ self[$0] })
         } set {
-            typeMetadata
-                .allFields
-                .first(where: { $0.key == key })
-                .map({ self[$0] = try! newValue.unwrap() })
+            let field = typeMetadata.allFields.first(where: { $0.key == key })!
+               
+            self[field] = try! newValue.unwrap() 
         }
     }
 }
