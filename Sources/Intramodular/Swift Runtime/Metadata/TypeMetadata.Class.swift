@@ -7,17 +7,17 @@ import Swallow
 public typealias ClassTypeMetadata = TypeMetadata
 
 extension TypeMetadata {
-    public struct Class: SwiftRuntimeTypeMetadataWrapper, NominalTypeMetadataProtocol {
+    public struct Class: SwiftRuntimeTypeMetadataWrapper, NominalTypeMetadataType {
         typealias SwiftRuntimeTypeMetadata = SwiftRuntimeClassMetadata
         
-        public let value: Any.Type
+        public let base: Any.Type
         
-        public init?(_ value: Any.Type) {
-            guard SwiftRuntimeTypeMetadata(base: value).kind == .class else {
+        public init?(_ base: Any.Type) {
+            guard SwiftRuntimeTypeMetadata(base: base).kind == .class else {
                 return nil
             }
             
-            self.value = value
+            self.base = base
         }
         
         public var mangledName: String {

@@ -8,14 +8,14 @@ extension TypeMetadata {
     public struct Existential: SwiftRuntimeTypeMetadataWrapper {
         typealias SwiftRuntimeTypeMetadata = SwiftRuntimeProtocolMetadata
         
-        public let value: Any.Type
+        public let base: Any.Type
         
-        public init?(_ value: Any.Type) {
-            guard SwiftRuntimeTypeMetadata(base: value).kind == .existential else {
+        public init?(_ base: Any.Type) {
+            guard SwiftRuntimeTypeMetadata(base: base).kind == .existential else {
                 return nil
             }
             
-            self.value = value
+            self.base = base
         }
         
         public var mangledName: String {

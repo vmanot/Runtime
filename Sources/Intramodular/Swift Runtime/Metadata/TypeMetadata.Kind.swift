@@ -74,7 +74,7 @@ extension TypeMetadata {
 
 extension TypeMetadata {
     public var kind: TypeMetadata.Kind {
-        return TypeMetadata.Kind(rawValue: unsafeBitCast(value, to: UnsafePointer<Int>.self)[0])
+        return TypeMetadata.Kind(rawValue: unsafeBitCast(base, to: UnsafePointer<Int>.self)[0])
     }
     
     public var typed: Any {

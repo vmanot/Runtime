@@ -8,35 +8,29 @@ extension TypeMetadata {
     public typealias Nominal = NominalTypeMetadata
 }
 
-public struct NominalTypeMetadata: FailableWrapper {
-    public let value: Any.Type
+public struct NominalTypeMetadata: NominalTypeMetadataType {
+    public let base: Any.Type
     
-    public var fields: [Field] {
-        return (TypeMetadata(value).typed as! NominalTypeMetadataProtocol).fields
+    public var mangledName: String {
+        (TypeMetadata(base).typed as! _opaque_NominalTypeMetadataType).mangledName
     }
     
-    public init?(_ value: Any.Type) {
-        guard TypeMetadata(value).typed is NominalTypeMetadataProtocol else {
+    public var fields: [Field] {
+        return (TypeMetadata(base).typed as! _opaque_NominalTypeMetadataType).fields
+    }
+    
+    public init?(_ base: Any.Type) {
+        guard TypeMetadata(base).typed is _opaque_NominalTypeMetadataType else {
             return nil
         }
         
-        self.value = value
-    }
-    
-    public static func of<T>(_ value: T) -> Self {
-        .init(uncheckedValue: type(of: value))
+        self.base = base
     }
 }
 
 // MARK: - Protocol Implementations -
 
-extension TypeMetadata.Nominal: CustomStringConvertible {
-    public var description: String {
-        return String(describing: value)
-    }
-}
-
-extension TypeMetadata.Nominal: RandomAccessCollection2 {
+extension TypeMetadata.Nominal: RandomAccessCollection {
     public typealias Index = Int
     
     public var startIndex: Index {

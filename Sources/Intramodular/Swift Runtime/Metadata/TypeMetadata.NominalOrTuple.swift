@@ -5,29 +5,31 @@
 import Swallow
 
 extension TypeMetadata {
-    public struct NominalOrTuple: FailableWrapper {
-        public let value: Any.Type
-        
-        public var fields: [NominalTypeMetadata.Field] {
-            if let type = TypeMetadata.Tuple(value) {
-                return type.fields
-            } else {
-                return TypeMetadata.Nominal(value)!.fields
-            }
+    public typealias NominalOrTuple = NominalOrTupleTypeMetadata
+}
+
+public struct NominalOrTupleTypeMetadata: TypeMetadataType {
+    public let base: Any.Type
+    
+    public var fields: [NominalTypeMetadata.Field] {
+        if let type = TypeMetadata.Tuple(base) {
+            return type.fields
+        } else {
+            return TypeMetadata.Nominal(base)!.fields
         }
-        
-        public init?(_ value: Any.Type) {
-            if let type = TypeMetadata.Nominal(value) {
-                self.value = type.value
-            } else if let type = TypeMetadata.Tuple(value) {
-                self.value = type.value
-            } else {
-                return nil
-            }
+    }
+    
+    public init?(_ base: Any.Type) {
+        if let type = TypeMetadata.Nominal(base) {
+            self.base = type.base
+        } else if let type = TypeMetadata.Tuple(base) {
+            self.base = type.base
+        } else {
+            return nil
         }
-        
-        public static func of<T>(_ value: T) -> Self {
-            .init(uncheckedValue: type(of: value))
-        }
+    }
+    
+    public static func of(_ value: Any) -> Self {
+        Self(type(of: value))!
     }
 }

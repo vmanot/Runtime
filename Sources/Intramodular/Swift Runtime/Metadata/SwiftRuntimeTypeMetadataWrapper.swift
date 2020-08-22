@@ -4,7 +4,7 @@
 
 import Swallow
 
-protocol SwiftRuntimeTypeMetadataWrapper: FailableWrapper where Value == Any.Type {
+protocol SwiftRuntimeTypeMetadataWrapper: TypeMetadataType {
     associatedtype SwiftRuntimeTypeMetadata: SwiftRuntimeTypeMetadataProtocol
     
     var metadata: SwiftRuntimeTypeMetadata { get }
@@ -12,6 +12,6 @@ protocol SwiftRuntimeTypeMetadataWrapper: FailableWrapper where Value == Any.Typ
 
 extension SwiftRuntimeTypeMetadataWrapper {
     var metadata: SwiftRuntimeTypeMetadata {
-        SwiftRuntimeTypeMetadata.init(base: value)
+        SwiftRuntimeTypeMetadata.init(base: base)
     }
 }

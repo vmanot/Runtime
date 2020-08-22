@@ -35,7 +35,7 @@ public func fmake(_ t1: Any.Type, _ t2: Any.Type) -> Any.Type {
 }
 
 public func fmake(_ t1: TypeMetadata, _ t2: TypeMetadata) -> TypeMetadata.Function {
-    return TypeMetadata.Function(fmake(t1.value, t2.value))!
+    return TypeMetadata.Function(fmake(t1.base, t2.base))!
 }
 
 extension AnyProtocol {
@@ -53,7 +53,7 @@ public func concatenate(_ t1: Any.Type, _ t2: Any.Type) -> Any.Type {
 }
 
 public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.value).concatenate(withUnknown: extend(t2.value)))
+    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base)))
 }
 
 extension AnyProtocol {
@@ -75,7 +75,7 @@ public func concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type) -> Any.T
 }
 
 public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.value).concatenate(withUnknown: extend(t2.value), extend(t3.value)))
+    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base), extend(t3.base)))
 }
 
 extension AnyProtocol {
@@ -101,7 +101,7 @@ public func concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: An
 }
 
 public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.value).concatenate(withUnknown: extend(t2.value), extend(t3.value), extend(t4.value)))
+    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base), extend(t3.base), extend(t4.base)))
 }
 
 extension AnyProtocol {
@@ -131,7 +131,7 @@ public func concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: An
 }
 
 public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata, _ t5: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.value).concatenate(withUnknown: extend(t2.value), extend(t3.value), extend(t4.value), extend(t5.value)))
+    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base), extend(t3.base), extend(t4.base), extend(t5.base)))
 }
 
 extension AnyProtocol {
@@ -165,5 +165,5 @@ public func concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: An
 }
 
 public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata, _ t5: TypeMetadata, _ t6: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.value).concatenate(withUnknown: extend(t2.value), extend(t3.value), extend(t4.value), extend(t5.value), extend(t6.value)))
+    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base), extend(t3.base), extend(t4.base), extend(t5.base), extend(t6.base)))
 }

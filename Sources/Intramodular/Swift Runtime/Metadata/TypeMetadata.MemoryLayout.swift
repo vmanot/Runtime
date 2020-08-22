@@ -63,7 +63,7 @@ extension TypeMetadata.MemoryLayout: Equatable {
 
 extension TypeMetadata {
     public var memoryLayout: TypeMetadata.MemoryLayout {
-        return .init(value)
+        return .init(base)
     }
 
     public var isSizeZero: Bool {

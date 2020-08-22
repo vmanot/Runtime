@@ -4,26 +4,23 @@
 
 import Swallow
 
-public struct AnyNominalOrTupleValue: FailableWrapper {
-    public typealias Value = Any
-    
-    public var value: Value
+public struct AnyNominalOrTupleMirror: MirrorType, FailableWrapper {
+    public var value: Any
     public var typeMetadata: TypeMetadata.NominalOrTuple
     
-    public var supervalue: AnyNominalOrTupleValue? {
-        guard let type = (typeMetadata.value as? AnyClass).map(ObjCClass.init) else {
+    public var supertypeMirror: AnyNominalOrTupleMirror? {
+        guard let supertypeMetadata = typeMetadata.supertypeMetadata else {
             return nil
         }
         
-        guard let supertype = type.superclass else {
-            return nil
-        }
-        
-        return .init(unchecked: value, typeMetadata: .init(uncheckedValue: supertype.value))
+        return .init(
+            unchecked: value,
+            typeMetadata: supertypeMetadata
+        )
     }
     
     init(
-        unchecked value: Value,
+        unchecked value: Any,
         typeMetadata: TypeMetadata.NominalOrTuple
     ) {
         self.value = value
@@ -31,7 +28,7 @@ public struct AnyNominalOrTupleValue: FailableWrapper {
     }
     
     public init(unchecked value: Value) {
-        self.init(unchecked: value, typeMetadata: .init(uncheckedValue: type(of: value)))
+        self.init(unchecked: value, typeMetadata: .of(value))
     }
     
     public init?(_ value: Value) {
@@ -45,34 +42,16 @@ public struct AnyNominalOrTupleValue: FailableWrapper {
 
 // MARK: - Protocol Implementations -
 
-extension AnyNominalOrTupleValue: CustomStringConvertible {
+extension AnyNominalOrTupleMirror: CustomStringConvertible {
     public var description: String {
         return String(describing: value)
     }
 }
 
-extension AnyNominalOrTupleValue: KeyExposingMutableDictionaryProtocol {
+extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
     public var keys: [AnyStringKey] {
-        return typeMetadata.fields.map({ .init(stringValue: $0.name) })
+        typeMetadata.fields.map({ .init(stringValue: $0.name) })
     }
-    
-    public subscript(_ key: AnyStringKey) -> Any? {
-        get {
-            return typeMetadata
-                .fields
-                .index(of: { $0.name == key.stringValue })
-                .map({ self[$0] })
-        } set {
-            typeMetadata
-                .fields
-                .index(of: { $0.name == key.stringValue })
-                .map({ self[$0] = try! newValue.unwrap() })
-        }
-    }
-}
-
-extension AnyNominalOrTupleValue: Sequence {
-    public typealias Element = (key: AnyStringKey, value: Any)
     
     public subscript(index: Int) -> Any {
         get {
@@ -97,6 +76,29 @@ extension AnyNominalOrTupleValue: Sequence {
                 }
             }
         }
+    }
+    
+    public subscript(_ key: AnyStringKey) -> Any? {
+        get {
+            return typeMetadata
+                .fields
+                .index(of: { $0.name == key.stringValue })
+                .map({ self[$0] })
+        } set {
+            typeMetadata
+                .fields
+                .index(of: { $0.name == key.stringValue })
+                .map({ self[$0] = try! newValue.unwrap() })
+        }
+    }
+}
+
+extension AnyNominalOrTupleMirror: Sequence {
+    public typealias Element = (key: AnyStringKey, value: Any)
+    public typealias Children = AnySequence<Element>
+    
+    public var children: Children {
+        .init(self)
     }
     
     public func makeIterator() -> AnyIterator<Element> {

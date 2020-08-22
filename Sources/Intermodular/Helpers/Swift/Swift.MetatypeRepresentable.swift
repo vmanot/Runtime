@@ -14,9 +14,9 @@ public protocol MetatypeRepresentable {
 
 extension MetatypeRepresentable {
     public init?(metadata: TypeMetadata) {
-        self.init(metatype: metadata.value)
+        self.init(metatype: metadata.base)
     }
-
+    
     public func toTypeMetadata() -> TypeMetadata {
         return .init(toMetatype())
     }

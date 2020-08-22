@@ -8,14 +8,14 @@ extension TypeMetadata {
     public struct Tuple: SwiftRuntimeTypeMetadataWrapper {
         typealias SwiftRuntimeTypeMetadata = SwiftRuntimeTupleMetadata
         
-        public let value: Any.Type
+        public let base: Any.Type
         
-        public init?(_ value: Any.Type) {
-            guard SwiftRuntimeTypeMetadata(base: value).kind == .tuple else {
+        public init?(_ base: Any.Type) {
+            guard SwiftRuntimeTypeMetadata(base: base).kind == .tuple else {
                 return nil
             }
             
-            self.value = value
+            self.base = base
         }
         
         public var fields: [NominalTypeMetadata.Field] {
@@ -51,7 +51,7 @@ extension TypeMetadata {
                 self = Runtime.concatenate(types[atDistance: 0], types[atDistance: 1], types[atDistance: 2], types[atDistance: 3], types[atDistance: 4], types[atDistance: 5])
 
             default:
-                self = types.fauxRandomAccessView.reduce({ .init(Runtime.concatenate($0.value, $1.value)) }).forceUnwrap() // ugly workaround
+                self = types.fauxRandomAccessView.reduce({ .init(Runtime.concatenate($0.base, $1.base)) }).forceUnwrap() // ugly workaround
         }
     }
     

@@ -67,7 +67,7 @@ extension OpaqueExistentialContainerInterface {
         if let address = address {
             address.assumingMemoryBound(to: self).reinitialize(to: value as! Self)
         } else {
-            assert(TypeMetadata(of: self).isSizeZero)
+            assert(TypeMetadata.of(self).isSizeZero)
         }
     }
 
@@ -159,7 +159,7 @@ extension OpaqueExistentialContainer: UnmanagedProtocol {
 
     public static func passUnretained(_ value: Instance) -> OpaqueExistentialContainer {
         if Swift.type(of: value) is AnyClass {
-            let type = TypeMetadata(of: value)
+            let type = TypeMetadata.of(value)
             let buffer = Buffer((unsafeBitCast(try! cast(value, to: AnyObject.self)), nil, nil))
 
             return .init(buffer: buffer, type: type)
@@ -196,7 +196,7 @@ extension TypeMetadata {
             let witnessTable: Int
         }
 
-        let container = ProtocolTypeContainer(type: value, witnessTable: 0)
+        let container = ProtocolTypeContainer(type: base, witnessTable: 0)
 
         return unsafeBitCast(container, to: OpaqueExistentialContainerInterface.Type.self)
     }

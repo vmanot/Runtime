@@ -5,17 +5,17 @@
 import Swallow
 
 extension TypeMetadata {
-    public struct Enumeration: SwiftRuntimeTypeMetadataWrapper, NominalTypeMetadataProtocol {
+    public struct Enumeration: SwiftRuntimeTypeMetadataWrapper, NominalTypeMetadataType {
         typealias SwiftRuntimeTypeMetadata = SwiftRuntimeEnumMetadata
         
-        public let value: Any.Type
+        public let base: Any.Type
         
-        public init?(_ value: Any.Type) {
-            guard SwiftRuntimeTypeMetadata(base: value).kind == .enum else {
+        public init?(_ base: Any.Type) {
+            guard SwiftRuntimeTypeMetadata(base: base).kind == .enum else {
                 return nil
             }
             
-            self.value = value
+            self.base = base
         }
         
         public var mangledName: String {

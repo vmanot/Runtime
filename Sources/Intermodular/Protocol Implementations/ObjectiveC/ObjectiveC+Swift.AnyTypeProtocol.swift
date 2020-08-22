@@ -21,7 +21,11 @@ extension ObjCTypeEncoding: MetatypeRepresentable {
     }
 }
 
-extension ObjCClass: NominalTypeMetadataProtocol {
+extension ObjCClass: NominalTypeMetadataType {
+    public var base: Any.Type {
+        value
+    }
+
     public var mangledName: String {
         return name
     }
@@ -34,5 +38,13 @@ extension ObjCClass: NominalTypeMetadataProtocol {
                 offset: $0.offset
             )
         }
+    }
+    
+    public init?(_ base: Any.Type) {
+        guard let base = base as? AnyClass else {
+            return nil
+        }
+        
+        self.init(base)
     }
 }

@@ -49,7 +49,8 @@ public struct OpaqueExistentialContainer: CustomDebugStringConvertible {
 
 extension OpaqueExistentialContainer {
     public func getUnretainedValue<T>() -> T {
-        precondition(type.value == T.self)
+        precondition(type.base == T.self)
+        
         return unretainedValue as! T
     }
 }
@@ -70,7 +71,7 @@ extension OpaqueExistentialContainer: MutableContiguousStorage {
         let result: T
         
         if type.kind == .class {
-            let classType: AnyClass = type.value as! AnyClass
+            let classType: AnyClass = type.base as! AnyClass
             result = try body(BP(start: buffer.value.0, count: class_getInstanceSize(classType)))
         } else if type.kind == .struct || type.kind == .tuple {
             if type.memoryLayout.size > MemoryLayout<Buffer>.size {
@@ -88,14 +89,14 @@ extension OpaqueExistentialContainer: MutableContiguousStorage {
 
 extension OpaqueExistentialContainer: ObjCCodable {
     public var objCTypeEncoding: ObjCTypeEncoding {
-        return ObjCTypeEncoding(metatype: type.value) ?? .unknown
+        return ObjCTypeEncoding(metatype: type.base) ?? .unknown
     }
     
     public init(decodingObjCValueFromRawBuffer buffer: UnsafeMutableRawPointer?, encoding: ObjCTypeEncoding) {
         let type = TypeMetadata(encoding.toMetatype())
         
         if let buffer = buffer {
-            if let type = type.value as? ObjCCodable.Type {
+            if let type = type.base as? ObjCCodable.Type {
                 let value: Any = type.init(decodingObjCValueFromRawBuffer: buffer, encoding: encoding)
                 self = .passUnretained(value)
             } else {
@@ -109,7 +110,7 @@ extension OpaqueExistentialContainer: ObjCCodable {
     }
     
     public func encodeObjCValueToRawBuffer() -> UnsafeMutableRawPointer {
-        if type.value is AnyClass {
+        if type.base is AnyClass {
             return UnsafePointer
                 .allocate(initializingTo: -*>buffer.value.0! as AnyObject)
                 .mutableRawRepresentation
@@ -121,7 +122,7 @@ extension OpaqueExistentialContainer: ObjCCodable {
     }
     
     public func deinitializeRawObjCValueBuffer(_ buffer: UnsafeMutableRawPointer) {
-        if type.value is AnyClass {
+        if type.base is AnyClass {
             buffer.assumingMemoryBound(to: AnyObject.self).deinitialize(count: 1)
         }
     }
@@ -135,7 +136,7 @@ extension Array where Element == OpaqueExistentialContainer {
             return OpaqueExistentialContainer(unitialized: type)
         } else if count == 1 && self[0].type == type {
             return self[0]
-        } else if let tuple = TypeMetadata.Tuple(type.value), tuple.fields.map({ $0.type }) == map({ $0.type }) {
+        } else if let tuple = TypeMetadata.Tuple(type.base), tuple.fields.map({ $0.type }) == map({ $0.type }) {
             return OpaqueExistentialContainer(type: type) { bytes in
                 var offset = 0
                 for element in self {
@@ -153,7 +154,7 @@ extension Array where Element == OpaqueExistentialContainer {
             return OpaqueExistentialContainer(unitialized: type)
         } else if count == 1 && self[0].type.memoryLayout == type.memoryLayout {
             return self[0]
-        } else if let tuple = TypeMetadata.Tuple(type.value), tuple.fields.map({ $0.type.memoryLayout }) == map({ $0.type.memoryLayout }) {
+        } else if let tuple = TypeMetadata.Tuple(type.base), tuple.fields.map({ $0.type.memoryLayout }) == map({ $0.type.memoryLayout }) {
             return OpaqueExistentialContainer(type: type) { bytes in
                 var offset = 0
                 for element in self {

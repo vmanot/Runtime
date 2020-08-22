@@ -64,7 +64,7 @@ extension ObjCTypeCoder {
         var encodedTypes: [ObjCTypeEncoding] = []
         
         for field in type.fields {
-            guard let encoded = ObjCTypeCoder.encode(field.type.value) else {
+            guard let encoded = ObjCTypeCoder.encode(field.type.base) else {
                 return nil
             }
             
@@ -224,14 +224,14 @@ extension ObjCTypeCoder {
     }
     
     public static func decode(_ encoding: ObjCTypeEncoding) -> Any.Type {
-        if let result = registry[encoding]?.value {
+        if let result = registry[encoding]?.base {
             return result
         } else if let result = decode(possibleSimple: encoding) {
             return result
         } else if let result = decode(parsing: encoding) {
             return result
         } else {
-            return TypeMetadata(tupleWithTypes: Array<Any.Type>(repeating: Byte.self, count: encoding.sizeInBytes)).value
+            return TypeMetadata(tupleWithTypes: Array<Any.Type>(repeating: Byte.self, count: encoding.sizeInBytes)).base
         }
     }
 }

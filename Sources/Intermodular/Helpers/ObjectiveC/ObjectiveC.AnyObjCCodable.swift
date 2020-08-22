@@ -58,7 +58,7 @@ extension AnyObjCCodable: ObjCCodable {
         let type = encoding.toTypeMetadata()
 
         if let buffer = buffer {
-            if let type = type.value as? ObjCCodable.Type {
+            if let type = type.base as? ObjCCodable.Type {
                 self.init(uncheckedValue: type.init(decodingObjCValueFromRawBuffer: buffer, encoding: encoding))
             } else {
                 self.init(uncheckedValue: OpaqueExistentialContainer(copyingBytesOfValueAt: buffer, type: type).unretainedValue)
@@ -105,7 +105,7 @@ extension AnyObjCCodable {
             if let type = type as? ObjCCodable.Type {
                 assert {
                     let layout1 = TypeMetadata(type).memoryLayout
-                    let layout2 = TypeMetadata(of: value).memoryLayout
+                    let layout2 = TypeMetadata.of(value).memoryLayout
 
                     return layout1.size == layout2.size
                 }
