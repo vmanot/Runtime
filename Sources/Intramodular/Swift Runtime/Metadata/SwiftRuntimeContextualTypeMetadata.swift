@@ -8,14 +8,17 @@ import Swallow
 private final class _DummyClass { }
 
 extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualTypeMetadataLayout {
+    @usableFromInline
     var isGeneric: Bool {
         (metadata.pointee.contextDescriptor.pointee.flags & 0x80) != 0
     }
     
+    @usableFromInline
     func mangledName() -> String {
         String(cString: metadata.pointee.contextDescriptor.pointee.mangledName.advanced())
     }
     
+    @usableFromInline
     func numberOfFields() -> Int {
         guard base != class_getSuperclass(_DummyClass.self) else {
             return 0
@@ -24,6 +27,7 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
         return Int(metadata.pointee.contextDescriptor.pointee.numberOfFields)
     }
     
+    @usableFromInline
     func fieldOffsets() -> [Int] {
         guard base != class_getSuperclass(_DummyClass.self) else {
             return []
@@ -38,6 +42,7 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
             .map(numericCast)
     }
     
+    @usableFromInline
     func genericArguments() -> UnsafeBufferPointer<Any.Type> {
         guard isGeneric else {
             return .init(start: nil, count: 0)
@@ -54,6 +59,7 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
         return UnsafeBufferPointer(start: genericArgumentVector(), count: count)
     }
     
+    @usableFromInline
     func genericArgumentVector() -> UnsafePointer<Any.Type> {
         return basePointer
             .assumingMemoryBound(to: UnsafeRawPointer.self)
@@ -61,6 +67,7 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
             .assumingMemoryBound(to: Any.Type.self)
     }
     
+    @usableFromInline
     var fields: [NominalTypeMetadata.Field] {
         guard base != class_getSuperclass(_DummyClass.self) else {
             return []
