@@ -8,13 +8,30 @@ public struct AnyNominalOrTupleValue: FailableWrapper {
     public typealias Value = Any
     
     public var value: Value
+    public var typeMetadata: TypeMetadata.NominalOrTuple
     
-    public var typeMetadata: TypeMetadata.NominalOrTuple {
-        return TypeMetadata.NominalOrTuple(type(of: value))!
+    public var supervalue: AnyNominalOrTupleValue? {
+        guard let type = (typeMetadata.value as? AnyClass).map(ObjCClass.init) else {
+            return nil
+        }
+        
+        guard let supertype = type.superclass else {
+            return nil
+        }
+        
+        return .init(unchecked: value, typeMetadata: .init(uncheckedValue: supertype.value))
+    }
+    
+    init(
+        unchecked value: Value,
+        typeMetadata: TypeMetadata.NominalOrTuple
+    ) {
+        self.value = value
+        self.typeMetadata = typeMetadata
     }
     
     public init(unchecked value: Value) {
-        self.value = value
+        self.init(unchecked: value, typeMetadata: .init(uncheckedValue: type(of: value)))
     }
     
     public init?(_ value: Value) {

@@ -7,9 +7,9 @@ import Swallow
 
 public struct ObjCMethod: CustomStringConvertible, Wrapper {
     public typealias Value = Method
-
+    
     public let value: Value
-
+    
     public init(_ value: Value) {
         self.value = value
     }
@@ -24,12 +24,12 @@ extension ObjCMethod {
             implementation.value,
             description.signature.value
         )
-
+        
         try! classAddMethodResult.orThrow()
         self = cls[methodNamed: description.name]!
         cls.dispose()
     }
-
+    
     public func getDescription() -> ObjCMethodDescription {
         return .init(method_getDescription(value).pointee)
     }
@@ -39,7 +39,7 @@ extension ObjCMethod {
     public var numberOfArguments: Int {
         return method_getNumberOfArguments(value).toInt()
     }
-
+    
     public var argumentTypes: [ObjCTypeEncoding] {
         return (0..<method_getNumberOfArguments(value))
             .lazy
@@ -47,11 +47,11 @@ extension ObjCMethod {
             .map({ String(utf8String: $0, deallocate: true)! })
             .map({ .init($0) })
     }
-
+    
     public var returnType: ObjCTypeEncoding {
         return .init(.init(utf8String: method_copyReturnType(value), deallocate: true))
     }
-
+    
     public var signature: ObjCMethodSignature {
         return .init(String(utf8String: method_getTypeEncoding(value))!)
     }

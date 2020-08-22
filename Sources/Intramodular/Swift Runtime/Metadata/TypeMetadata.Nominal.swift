@@ -22,6 +22,10 @@ public struct NominalTypeMetadata: FailableWrapper {
         
         self.value = value
     }
+    
+    public static func of<T>(_ value: T) -> Self {
+        .init(uncheckedValue: type(of: value))
+    }
 }
 
 // MARK: - Protocol Implementations -

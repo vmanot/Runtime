@@ -4,15 +4,26 @@
 
 import Swift
 
+/// A strongly typed mirror over a subject of a nominal type.
 public struct NominalMirror<Subject> {
     public var subject: Subject
+    public let typeMetadata: TypeMetadata.NominalOrTuple
+    
+    public var supervalue: NominalMirror<Any>? {
+        children.supervalue.flatMap(NominalMirror<Any>.init)
+    }
     
     public var children: AnyNominalOrTupleValue {
-        AnyNominalOrTupleValue(subject)!
+        .init(self)
+    }
+    
+    private init(subject: Subject, typeMetadata: TypeMetadata.NominalOrTuple) {
+        self.subject = subject
+        self.typeMetadata = typeMetadata
     }
     
     public init(reflecting subject: Subject) {
-        self.subject = subject
+        self.init(subject: subject, typeMetadata: .of(subject))
     }
 }
 
@@ -27,5 +38,23 @@ extension NominalMirror {
         } set {
             subject[keyPath: keyPath] = newValue
         }
+    }
+}
+
+// MARK: - Auxiliary Implementation -
+
+extension NominalMirror {
+    public init?(_ value: AnyNominalOrTupleValue) {
+        guard let subject = value.value as? Subject else {
+            return nil
+        }
+        
+        self.init(subject: subject, typeMetadata: value.typeMetadata)
+    }
+}
+
+extension AnyNominalOrTupleValue {
+    public init<T>(_ mirror: NominalMirror<T>) {
+        self.init(unchecked: mirror.subject, typeMetadata: mirror.typeMetadata)
     }
 }

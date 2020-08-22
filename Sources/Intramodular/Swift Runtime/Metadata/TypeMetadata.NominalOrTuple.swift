@@ -25,5 +25,9 @@ extension TypeMetadata {
                 return nil
             }
         }
+        
+        public static func of<T>(_ value: T) -> Self {
+            .init(uncheckedValue: type(of: value))
+        }
     }
 }
