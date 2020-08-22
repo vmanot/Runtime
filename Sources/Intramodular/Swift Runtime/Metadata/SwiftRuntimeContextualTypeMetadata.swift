@@ -62,6 +62,10 @@ extension SwiftRuntimeTypeMetadata where MetadataLayout: SwiftRuntimeContextualT
     }
     
     var fields: [NominalTypeMetadata.Field] {
+        guard base != class_getSuperclass(_DummyClass.self) else {
+            return []
+        }
+        
         let offsets = fieldOffsets()
         let fieldDescriptor = metadata.pointee.contextDescriptor.pointee
             .fieldDescriptor
