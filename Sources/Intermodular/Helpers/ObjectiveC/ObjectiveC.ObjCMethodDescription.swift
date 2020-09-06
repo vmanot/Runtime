@@ -22,9 +22,9 @@ public struct ObjCMethodDescription: CustomDebugStringConvertible, CustomStringC
 extension ObjCMethodDescription {
     public var signature: ObjCMethodSignature {
         get {
-            return .init(String(utf8String: value.types).forceUnwrap())
+            return .init(rawValue: String(utf8String: value.types)!)
         } set {
-            value.types = newValue.value.nullTerminatedUTF8String().value
+            value.types = newValue.rawValue.nullTerminatedUTF8String().value
         }
     }
 

@@ -5,12 +5,10 @@
 import ObjectiveC
 import Swallow
 
-public struct ObjCSelector: ImplementationForwardingWrapper, Trivial {
-    public typealias Value = Selector
-    
-    public let value: Value
+public struct ObjCSelector: Trivial {
+    public let value: Selector
 
-    public init(_ value: Value) {
+    public init(_ value: Selector) {
         self.value = value
     }
 }
@@ -30,7 +28,7 @@ extension ObjCSelector: Equatable {
 }
 
 extension ObjCSelector: ExpressibleByStringLiteral {
-    public typealias StringLiteralType = Value.StringLiteralType
+    public typealias StringLiteralType = Selector.StringLiteralType
 
     public init(stringLiteral value: StringLiteralType) {
         self.init(.init(stringLiteral: value))
@@ -71,7 +69,7 @@ extension ObjCSelector: RawRepresentable2 {
     }
     
     public init(rawValue: String) {
-        self.init(Value(rawValue))
+        self.init(Selector(rawValue))
     }
 }
 

@@ -49,8 +49,24 @@ extension AnyNominalOrTupleMirror: CustomStringConvertible {
 }
 
 extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
+    public var fields: [NominalTypeMetadata.Field] {
+        typeMetadata.fields
+    }
+    
+    public var allFields: [NominalTypeMetadata.Field] {
+        guard let supertypeMirror = supertypeMirror else {
+            return fields
+        }
+        
+        return .init(supertypeMirror.allFields.join(fields))
+    }
+    
     public var keys: [AnyStringKey] {
-        typeMetadata.fields.map({ .init(stringValue: $0.name) })
+        fields.map({ .init(stringValue: $0.name) })
+    }
+    
+    public var allKeys: [AnyStringKey] {
+        allFields.map({ .init(stringValue: $0.name) })
     }
     
     public subscript(field: NominalTypeMetadata.Field) -> Any {
@@ -82,8 +98,8 @@ extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
                 .map({ self[$0] })
         } set {
             let field = typeMetadata.allFields.first(where: { $0.key == key })!
-               
-            self[field] = try! newValue.unwrap() 
+            
+            self[field] = try! newValue.unwrap()
         }
     }
 }
@@ -102,7 +118,7 @@ extension AnyNominalOrTupleMirror: Sequence {
             return children
         }
         
-        return .init(supertypeMirror.children.join(children))
+        return .init(supertypeMirror.allChildren.join(children))
     }
     
     public func makeIterator() -> AnyIterator<Element> {

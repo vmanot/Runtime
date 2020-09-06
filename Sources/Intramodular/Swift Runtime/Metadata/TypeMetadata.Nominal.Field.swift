@@ -5,7 +5,7 @@
 import Swallow
 
 extension TypeMetadata.Nominal {
-    public struct Field: CustomDebugStringConvertible, CustomStringConvertible, Named {
+    public struct Field: CustomDebugStringConvertible, CustomStringConvertible, Hashable, Named {
         public let name: String
         public let type: TypeMetadata
         public let offset: Int
@@ -27,15 +27,5 @@ extension TypeMetadata.Nominal.Field {
         self.name = objCInstanceVariable.name
         self.type = .init(objCInstanceVariable.typeEncoding.toMetatype())
         self.offset = objCInstanceVariable.offset
-    }
-}
-
-// MARK: - Protocol Implementations -
-
-extension TypeMetadata.Nominal.Field: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(type)
-        hasher.combine(offset)
     }
 }

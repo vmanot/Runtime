@@ -17,3 +17,5 @@ import Swallow
     
     func getArgumentTypeAtIndex(_: UInt) -> UnsafePointer<CChar>
 }
+
+let NSMethodSignatureType = unsafeBitCast(ObjCClass(name: "NSMethodSignature"), to: NSMethodSignatureProtocol.Type.self)

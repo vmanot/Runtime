@@ -157,11 +157,11 @@ extension ObjCClass: ExtensibleSequence {
     }
     
     public func insert(_ description: ObjCMethodDescription, _ implementation: ObjCImplementation) throws {
-        try class_addMethod(value, Selector(description.name), implementation.value, description.signature.value).orThrow()
+        try class_addMethod(value, Selector(description.name), implementation.value, description.signature.rawValue).orThrow()
     }
     
     public func insert(_ method: ObjCMethod) throws {
-        try class_addMethod(value, Selector(method.name), method.implementation.value, method.getDescription().signature.value).orThrow()
+        try class_addMethod(value, Selector(method.name), method.implementation.value, method.getDescription().signature.rawValue).orThrow()
     }
     
     public static func += (lhs: ObjCClass, rhs: ObjCMethod) {
@@ -265,7 +265,7 @@ extension ObjCClass {
     }
     
     public func addMethod(named name: ObjCSelector, implementation: ObjCImplementation, signature: ObjCMethodSignature) throws {
-        try class_addMethod(value, name.value, implementation.value, signature.value).orThrow()
+        try class_addMethod(value, name.value, implementation.value, signature.rawValue).orThrow()
     }
     
     @discardableResult
@@ -275,17 +275,17 @@ extension ObjCClass {
     
     @discardableResult
     public func replace(_ description: ObjCMethodDescription, with implementation: ObjCImplementation) throws -> ObjCImplementation? {
-        return class_replaceMethod(value, Selector(description.name), implementation.value, description.signature.value).map { .init($0) }
+        return class_replaceMethod(value, Selector(description.name), implementation.value, description.signature.rawValue).map { .init($0) }
     }
     
     @discardableResult
     public func replace(_ method: ObjCMethod, with implementation: ObjCImplementation) -> ObjCImplementation? {
-        return class_replaceMethod(value, Selector(method.name), implementation.value, method.getDescription().signature.value).map({ .init($0) })
+        return class_replaceMethod(value, Selector(method.name), implementation.value, method.getDescription().signature.rawValue).map({ .init($0) })
     }
     
     @discardableResult
     public func replace(_ method: ObjCMethod, with implementation: ObjCImplementation, signature: ObjCMethodSignature) throws -> ObjCImplementation? {
-        return class_replaceMethod(value, Selector(method.name), implementation.value, signature.value).map { .init($0) }
+        return class_replaceMethod(value, Selector(method.name), implementation.value, signature.rawValue).map { .init($0) }
     }
 }
 

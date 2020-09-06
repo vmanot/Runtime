@@ -22,7 +22,7 @@ extension ObjCMethod {
             cls.value,
             description.selector.value,
             implementation.value,
-            description.signature.value
+            description.signature.rawValue
         )
         
         try! classAddMethodResult.orThrow()
@@ -53,7 +53,7 @@ extension ObjCMethod {
     }
     
     public var signature: ObjCMethodSignature {
-        return .init(String(utf8String: method_getTypeEncoding(value))!)
+        return .init(rawValue: String(utf8String: method_getTypeEncoding(value))!)
     }
 }
 

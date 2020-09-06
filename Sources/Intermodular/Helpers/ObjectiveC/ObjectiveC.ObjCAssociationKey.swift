@@ -5,23 +5,15 @@
 import ObjectiveC
 import Swallow
 
-public struct ObjCAssociationKey<T>: ImplementationForwardingMutableStore {
-    public typealias Storage = HeapWrapper<ObjCAssociationPolicy>
+public struct ObjCAssociationKey<T> {
+    private let storage: HeapWrapper<ObjCAssociationPolicy>
     
-    public var storage: Storage
-
-    public init(storage: Storage) {
-        self.storage = .init(.retain)
-    }
-}
-
-extension ObjCAssociationKey {
     public var policy: ObjCAssociationPolicy {
         return storage.value
     }
-
+    
     public init(policy: ObjCAssociationPolicy) {
-        self.init(storage: .init(policy))
+        self.storage = .init(policy)
     }
 }
 
@@ -43,28 +35,28 @@ extension ObjCAssociationKey: RawValueConvertible {
     public typealias RawValue = UnsafeRawPointer
     
     public var rawValue: RawValue {
-        return unsafeBitCast(storage)
+        unsafeBitCast(storage, to: UnsafeRawPointer.self)
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Auxiliary Implementation -
 
 public struct ObjCAssociation<Object: ObjCObject, AssociatedValue> {
     private weak var object: Object?
     private let key: ObjCAssociationKey<AssociatedValue>
-
+    
     public init(object: Object?, key: ObjCAssociationKey<AssociatedValue>) {
         self.object = object
         self.key = key
     }
-
+    
     public init(object: Object?, value: AssociatedValue) {
         self.object = object
         self.key = ObjCAssociationKey<AssociatedValue>()
-
+        
         object?[key] = value
     }
-
+    
     public func dissociate() {
         object?[key] = nil
     }

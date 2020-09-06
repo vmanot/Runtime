@@ -25,19 +25,19 @@ extension ObjCProtocol: CaseIterable {
 
 extension ObjCProtocol: ExtensibleSequence {
     public func insert(instanceMethod method: ObjCMethodDescription) {
-        protocol_addMethodDescription(value, Selector(method.name), method.signature.value, true, true)
+        protocol_addMethodDescription(value, Selector(method.name), method.signature.rawValue, true, true)
     }
     
     public func insert(classMethod method: ObjCMethodDescription) {
-        protocol_addMethodDescription(value, Selector(method.name), method.signature.value, true, false)
+        protocol_addMethodDescription(value, Selector(method.name), method.signature.rawValue, true, false)
     }
     
     public func insert(optionalInstanceMethod method: ObjCMethodDescription) {
-        protocol_addMethodDescription(value, Selector(method.name), method.signature.value, false, true)
+        protocol_addMethodDescription(value, Selector(method.name), method.signature.rawValue, false, true)
     }
     
     public func insert(optionalClassMethod method: ObjCMethodDescription) {
-        protocol_addMethodDescription(value, Selector(method.name), method.signature.value, false, false)
+        protocol_addMethodDescription(value, Selector(method.name), method.signature.rawValue, false, false)
     }
     
     public func insert(adoptedProtocol `protocol`: ObjCProtocol) {

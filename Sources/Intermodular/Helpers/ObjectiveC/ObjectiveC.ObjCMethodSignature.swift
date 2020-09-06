@@ -5,13 +5,11 @@
 import ObjectiveC
 import Swallow
 
-public struct ObjCMethodSignature: CustomStringConvertible, Hashable, ImplementationForwardingWrapper {
-    public typealias Value = String
+public struct ObjCMethodSignature: Codable, Hashable, RawRepresentable {
+    public let rawValue: String
     
-    public let value: Value
-    
-    public init(_ value: Value) {
-        self.value = value
+    public init(rawValue: String) {
+        self.rawValue = rawValue
     }
 }
 
@@ -21,7 +19,7 @@ extension ObjCMethodSignature {
     public var returnType: ObjCTypeEncoding {
         return ObjCTypeEncoding(returnTypeFrom: toNSMethodSignature())
     }
-
+    
     public var isVoidReturn: Bool {
         return returnType == .void
     }
@@ -31,12 +29,20 @@ extension ObjCMethodSignature {
     var isSpecialStructReturn: Bool {
         return toNSMethodSignature().debugDescription.contains("is special struct return? YES")
     }
-
+    
     public func toNSMethodSignature() -> NSMethodSignatureProtocol {
-        return (-*>ObjCClass(name: "NSMethodSignature") as NSMethodSignatureProtocol.Type).signatureWithObjCTypes(value)
+        return NSMethodSignatureType.signatureWithObjCTypes(rawValue)
     }
     
     public func toEmptyNSInvocation() -> NSInvocationProtocol {
-        return (-*>ObjCClass(name: "NSInvocation") as NSInvocationProtocol.Type).invocationWithMethodSignature(toNSMethodSignature())
+        NSInvocationType.invocationWithMethodSignature(toNSMethodSignature())
+    }
+}
+
+// MARK: - Protocol Implementations -
+
+extension ObjCMethodSignature: CustomStringConvertible {
+    public var description: String {
+        rawValue.description
     }
 }

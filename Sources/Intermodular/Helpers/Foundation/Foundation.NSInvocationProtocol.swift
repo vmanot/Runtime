@@ -28,6 +28,8 @@ import Swallow
     func invokeWithTarget(_: AnyObject)
 }
 
+let NSInvocationType = unsafeBitCast(ObjCClass(name: "NSInvocation"), to: NSInvocationProtocol.Type.self)
+
 // MARK: - Auxiliary Extensions -
 
 extension NSInvocationProtocol {
