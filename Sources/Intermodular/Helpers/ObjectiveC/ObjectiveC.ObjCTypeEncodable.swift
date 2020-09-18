@@ -9,7 +9,7 @@ public protocol ObjCTypeEncodable {
     static var objCTypeEncoding: ObjCTypeEncoding { get }
 }
 
-// MARK: - Concrete Implementations -
+// MARK: - Conformances -
 
 extension Pointer where Self: ObjCTypeEncodable {
     public static var objCTypeEncoding: ObjCTypeEncoding {

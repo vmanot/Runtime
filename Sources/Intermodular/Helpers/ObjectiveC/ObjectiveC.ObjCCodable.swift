@@ -14,7 +14,7 @@ public protocol ObjCCodable {
     func deinitializeRawObjCValueBuffer(_: UnsafeMutableRawPointer)
 }
 
-// MARK: - Concrete Implementations -
+// MARK: - Conformances -
 
 extension ObjCCodable {
     public func deinitializeRawObjCValueBuffer(_: UnsafeMutableRawPointer) {
