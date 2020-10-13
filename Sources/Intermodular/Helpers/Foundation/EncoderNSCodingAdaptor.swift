@@ -27,7 +27,7 @@ extension EncoderNSCodingAdaptor {
             try! base.encode(NSCodingToEncodable(base: object), forKey: AnyStringKey(stringValue: key))
             try! base.encode(NSStringFromClass(type(of: object)), forKey: AnyStringKey(stringValue: key + EncoderNSCodingAdaptor.classKeySuffix))
         } else {
-            TODO.unimplemented
+            fatalError("unimplemented")
         }
     }
     

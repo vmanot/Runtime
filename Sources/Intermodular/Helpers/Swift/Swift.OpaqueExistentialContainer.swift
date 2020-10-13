@@ -5,7 +5,8 @@
 import ObjectiveC
 import Swallow
 
-extension OpaqueExistentialContainer {
+@frozen
+public struct OpaqueExistentialContainer: CustomDebugStringConvertible {
     @frozen
     public struct Buffer: MutableWrapper, Trivial {
         public typealias Value = (UnsafeMutableRawPointer?, UnsafeMutableRawPointer?, UnsafeMutableRawPointer?)
@@ -20,10 +21,11 @@ extension OpaqueExistentialContainer {
             value = (nil, nil, nil)
         }
     }
-}
-
-@frozen
-public struct OpaqueExistentialContainer: CustomDebugStringConvertible {
+    
+    public enum Error: Swift.Error {
+        case runtimeCastError
+    }
+    
     public static var headerSize: Int {
         if CPU.Architecture.is64Bit {
             return 16
@@ -145,7 +147,7 @@ extension Array where Element == OpaqueExistentialContainer {
                 }
             }
         } else {
-            _ = TODO.unimplemented
+            throw OpaqueExistentialContainer.Error.runtimeCastError
         }
     }
     
@@ -163,7 +165,7 @@ extension Array where Element == OpaqueExistentialContainer {
                 }
             }
         } else {
-            TODO.unimplemented
+            throw OpaqueExistentialContainer.Error.runtimeCastError
         }
     }
 }

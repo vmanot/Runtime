@@ -49,8 +49,4 @@ extension DecoderNSCodingAdaptor {
     override open func decodeDouble(forKey key: String) -> Double {
         return try! base.decode(Double.self, forKey: AnyStringKey(stringValue: key))
     }
-    
-    override open func decodeBytes(forKey key: String, returnedLength lengthp: UnsafeMutablePointer<Int>?) -> UnsafePointer<UInt8>? {
-        TODO.unimplemented
-    }
 }
