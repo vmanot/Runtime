@@ -42,7 +42,7 @@ extension ObjCTypeEncoding {
     }
 }
 
-// MARK: - Protocol Implementations - 
+// MARK: - Protocol Conformances - 
 
 extension ObjCTypeEncoding: AdditionOperatable {
     public static func + (lhs: ObjCTypeEncoding, rhs: ObjCTypeEncoding) -> ObjCTypeEncoding {

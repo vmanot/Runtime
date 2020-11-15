@@ -28,7 +28,7 @@ public struct NominalTypeMetadata: NominalTypeMetadataType {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension TypeMetadata.Nominal: RandomAccessCollection {
     public typealias Index = Int

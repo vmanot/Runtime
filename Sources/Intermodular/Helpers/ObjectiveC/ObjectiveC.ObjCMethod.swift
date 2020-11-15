@@ -57,7 +57,7 @@ extension ObjCMethod {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension ObjCMethod: Hashable {
     public func hash(into hasher: inout Hasher) {

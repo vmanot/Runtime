@@ -19,7 +19,7 @@ public enum ObjCProtocolItem {
     case adoptedProtocol(ObjCProtocol)
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension ObjCProtocolItem: Hashable {
     public func hash(into hasher: inout Hasher) {

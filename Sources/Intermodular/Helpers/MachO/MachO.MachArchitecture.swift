@@ -22,7 +22,7 @@ extension MachArchitecture {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension MachArchitecture: CaseIterable {
     public static var allCases: UnsafeBufferPointer<MachArchitecture> {

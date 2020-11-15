@@ -29,7 +29,7 @@ extension ObjCProperty {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension ObjCProperty: Named {
     public var name: String {

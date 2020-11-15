@@ -15,7 +15,7 @@ public struct ObjCProtocol: CustomStringConvertible, ExpressibleByStringLiteral,
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension ObjCProtocol: CaseIterable {
     public static var allCases: AnyRandomAccessCollection<ObjCProtocol> {

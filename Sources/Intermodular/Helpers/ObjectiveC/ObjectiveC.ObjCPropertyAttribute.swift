@@ -96,7 +96,7 @@ extension ObjCPropertyAttribute {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension ObjCPropertyAttribute: CustomDebugStringConvertible {
     public var debugDescription: String {

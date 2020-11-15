@@ -25,7 +25,7 @@ extension ObjCInstanceVariable {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension ObjCInstanceVariable: CustomStringConvertible {
     public var description: String {

@@ -40,7 +40,7 @@ public struct AnyNominalOrTupleMirror: MirrorType, FailableWrapper {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension AnyNominalOrTupleMirror: CustomStringConvertible {
     public var description: String {

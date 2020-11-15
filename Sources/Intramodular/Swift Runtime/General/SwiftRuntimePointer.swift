@@ -65,7 +65,7 @@ public struct SwiftRuntimeUnsafeRelativeVector<Element> {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension SwiftRuntimeUnsafeRelativePointer: CustomStringConvertible {
     public var description: String {

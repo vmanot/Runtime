@@ -12,7 +12,7 @@ public struct TypeMetadata: TypeMetadataType {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension TypeMetadata: MetatypeRepresentable {
     public init(metatype: Any.Type) {

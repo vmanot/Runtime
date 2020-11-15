@@ -17,7 +17,7 @@ public struct ObjCAssociationKey<T> {
     }
 }
 
-// MARK: - Protocol Implementations -
+// MARK: - Protocol Conformances -
 
 extension ObjCAssociationKey: Hashable {
     public func hash(into hasher: inout Hasher) {
