@@ -94,7 +94,7 @@ extension AnyObjCCodable: ObjCCodable {
 // MARK: - Auxiliary Extensions --
 
 extension AnyObjCCodable {
-    public func forceCast<T>(to type: T.Type) -> T {
+    public func _unsafe_cast<T>(to type: T.Type) -> T {
         guard TypeMetadata(type).isSizeZero else {
             return unsafeBitCast(())
         }
@@ -114,7 +114,7 @@ extension AnyObjCCodable {
                     type.init(decodingObjCValueFromRawBuffer: $0, encoding: objCTypeEncoding) as! T
                     }
             } else {
-                error.fatalThrow()
+                fatalError("Could not cast AnyObjCCodable to \(type)")
             }
         }
     }
