@@ -11,7 +11,7 @@ public class ObjCVirtualMethodImplementation: Hashable, ReferenceType {
     private let value: Value
     
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(objectIdentifierTree)
+        hasher.combine(ObjectIdentifier(self))
     }
     
     public init(_ value: @escaping Value) {
