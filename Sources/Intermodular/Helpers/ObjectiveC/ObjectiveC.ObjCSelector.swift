@@ -63,7 +63,7 @@ extension ObjCSelector: Named, NameInitiable {
     }
 }
 
-extension ObjCSelector: RawRepresentable2 {
+extension ObjCSelector: RawRepresentable {
     public var rawValue: String {
         return value.value
     }
