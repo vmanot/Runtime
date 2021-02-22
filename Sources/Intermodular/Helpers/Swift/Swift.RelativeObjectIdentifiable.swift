@@ -5,7 +5,7 @@
 import Swallow
 
 /// A protocol facilitating voluntary inter-object dependency tracking.
-public protocol RelativeObjectIdentifiable: class {
+public protocol RelativeObjectIdentifiable: AnyObject {
     var relativeObjectIdentity: RelativeObjectIdentity { get }
 }
 

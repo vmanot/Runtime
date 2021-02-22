@@ -22,27 +22,27 @@ public struct ObjCTypeEncoding: Hashable, Wrapper {
 extension ObjCTypeEncoding {
     public static var unknown = _Self("?")
     public static var void = _Self("v")
-
+    
     public var isSizeZero: Bool {
         return self == .void || toTypeMetadata().isSizeZero
     }
-
+    
     public var losingNominalPrecision: ObjCTypeEncoding {
         var resultValue = value
         
-        resultValue.replace(RegEx.match("\"").match(.word).match("\""), with: "")
-        resultValue.replace(RegEx.match("{").match(.word).match("="), with: "{")
-        resultValue.replace(RegEx.match("(").match(.word).match("="), with: "(")
+        resultValue.replace(RegularExpression().match("\"").match(.word).match("\""), with: "")
+        resultValue.replace(RegularExpression().match("{").match(.word).match("="), with: "{")
+        resultValue.replace(RegularExpression().match("(").match(.word).match("="), with: "(")
         
         return .init(resultValue)
     }
-
+    
     public func encapsulatingInBraces() -> ObjCTypeEncoding {
         return .init("{\(value)}")
     }
 }
 
-// MARK: - Protocol Conformances - 
+// MARK: - Protocol Conformances -
 
 extension ObjCTypeEncoding: AdditionOperatable {
     public static func + (lhs: ObjCTypeEncoding, rhs: ObjCTypeEncoding) -> ObjCTypeEncoding {
@@ -82,13 +82,13 @@ extension ObjCTypeEncoding {
         NSGetSizeAndAlignment(value, &result.size, &result.alignment)
         return result
     }
-
+    
     public var sizeInBytes: Int {
         var result = 0
         NSGetSizeAndAlignment(value, &result, nil)
         return result
     }
-
+    
     public var alignmentInBytes: Int {
         var result = 0
         NSGetSizeAndAlignment(value, nil, &result)
