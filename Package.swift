@@ -1,4 +1,4 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -6,7 +6,7 @@ let package = Package(
     name: "Runtime",
     platforms: [
         .iOS(.v13),
-        .macOS(.v10_15),
+        .macOS(.v11),
         .tvOS(.v13),
         .watchOS(.v6)
     ],
