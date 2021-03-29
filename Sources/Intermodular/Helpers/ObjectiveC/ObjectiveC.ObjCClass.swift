@@ -88,7 +88,7 @@ extension ObjCClass {
     }
 }
 
-// MARK: - Protocol Conformances -
+// MARK: - Conformances -
 
 extension ObjCClass: ApproximatelyEquatable {
     public static func ~= (lhs: ObjCClass, rhs: ObjCClass) -> Bool {

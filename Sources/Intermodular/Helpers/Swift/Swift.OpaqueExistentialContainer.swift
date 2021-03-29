@@ -57,7 +57,7 @@ extension OpaqueExistentialContainer {
     }
 }
 
-// MARK: - Protocol Conformances -
+// MARK: - Conformances -
 
 extension OpaqueExistentialContainer: MutableContiguousStorage {
     public typealias Element = Byte

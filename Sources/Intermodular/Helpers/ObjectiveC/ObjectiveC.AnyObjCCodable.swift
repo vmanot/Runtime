@@ -41,7 +41,7 @@ public struct AnyObjCCodable: FailableWrapper {
     }
 }
 
-// MARK: - Protocol Conformances - 
+// MARK: - Conformances - 
 
 extension AnyObjCCodable: CustomStringConvertible {
     public var description: String {

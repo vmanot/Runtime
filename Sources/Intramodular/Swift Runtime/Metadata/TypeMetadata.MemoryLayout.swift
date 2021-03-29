@@ -48,7 +48,7 @@ extension TypeMetadata.MemoryLayout {
     }
 }
 
-// MARK: - Protocol Conformances -
+// MARK: - Conformances -
 
 extension TypeMetadata.MemoryLayout: Equatable {
     public static func == (lhs: TypeMetadata.MemoryLayout, rhs: TypeMetadata.MemoryLayout) -> Bool {

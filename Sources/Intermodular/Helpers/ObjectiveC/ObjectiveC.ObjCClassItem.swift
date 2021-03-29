@@ -28,7 +28,7 @@ public enum ObjCClassItem: Hashable {
     }
 }
 
-// MARK: - Protocol Conformances -
+// MARK: - Conformances -
 
 extension ObjCClassItem: CustomStringConvertible {
     public var description: String {

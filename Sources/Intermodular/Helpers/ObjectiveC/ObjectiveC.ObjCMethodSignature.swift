@@ -39,7 +39,7 @@ extension ObjCMethodSignature {
     }
 }
 
-// MARK: - Protocol Conformances -
+// MARK: - Conformances -
 
 extension ObjCMethodSignature: CustomStringConvertible {
     public var description: String {

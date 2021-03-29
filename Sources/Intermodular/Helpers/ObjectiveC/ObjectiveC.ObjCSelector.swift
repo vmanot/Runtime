@@ -13,7 +13,7 @@ public struct ObjCSelector: Trivial {
     }
 }
 
-// MARK: - Protocol Conformances -
+// MARK: - Conformances -
 
 extension ObjCSelector: CustomStringConvertible {
     public var description: String {
