@@ -19,6 +19,12 @@ public struct ObjCAssociationKey<T> {
 
 // MARK: - Conformances -
 
+extension ObjCAssociationKey: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.storage === rhs.storage
+    }
+}
+
 extension ObjCAssociationKey: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(rawValue)

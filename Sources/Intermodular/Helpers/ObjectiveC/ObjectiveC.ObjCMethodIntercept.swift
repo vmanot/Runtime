@@ -14,12 +14,16 @@ public class ObjCMethodIntercept: Hashable, ReferenceType {
         self.selector = selector
     }
 
+    public func invalidate() {
+
+    }
+    
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(self))
     }
 
-    public func invalidate() {
-
+    public static func == (lhs: ObjCMethodIntercept, rhs: ObjCMethodIntercept) -> Bool {
+        lhs === rhs
     }
 }
 

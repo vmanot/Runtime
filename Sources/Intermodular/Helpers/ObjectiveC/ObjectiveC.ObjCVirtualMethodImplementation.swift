@@ -5,21 +5,25 @@
 import ObjectiveC
 import Swallow
 
-public class ObjCVirtualMethodImplementation: Hashable, ReferenceType {
+public final class ObjCVirtualMethodImplementation: Hashable, ReferenceType {
     public typealias Value = ((NSInvocationProtocol) -> Void)
     
     private let value: Value
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(self))
-    }
-    
+        
     public init(_ value: @escaping Value) {
         self.value = value
     }
     
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
+
     public func invoke(for invocation: NSInvocationProtocol) {
         value(invocation)
+    }
+    
+    public static func == (lhs: ObjCVirtualMethodImplementation, rhs: ObjCVirtualMethodImplementation) -> Bool {
+        lhs === rhs
     }
 }
 

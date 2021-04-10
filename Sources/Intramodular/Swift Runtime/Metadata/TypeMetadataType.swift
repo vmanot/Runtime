@@ -46,6 +46,12 @@ extension CustomStringConvertible where Self: TypeMetadataType {
     }
 }
 
+extension Equatable where Self: TypeMetadataType {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.base == rhs.base
+    }
+}
+
 extension Hashable where Self: TypeMetadataType {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(base))

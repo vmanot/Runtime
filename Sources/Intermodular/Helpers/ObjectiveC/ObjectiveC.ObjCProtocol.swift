@@ -98,6 +98,12 @@ extension ObjCProtocol: ExtensibleSequence {
     }
 }
 
+extension ObjCProtocol: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.value === rhs.value
+    }
+}
+
 extension ObjCProtocol: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
