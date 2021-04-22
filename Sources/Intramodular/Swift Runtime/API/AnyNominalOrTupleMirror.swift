@@ -14,7 +14,7 @@ public struct AnyNominalOrTupleMirror: MirrorType, FailableWrapper {
         }
         
         return .init(
-            unchecked: value,
+            unchecked: self.value as Any,
             typeMetadata: supertypeMetadata
         )
     }
@@ -117,7 +117,7 @@ extension AnyNominalOrTupleMirror: Sequence {
         guard let supertypeMirror = supertypeMirror else {
             return children
         }
-        
+
         return .init(supertypeMirror.allChildren.join(children))
     }
     

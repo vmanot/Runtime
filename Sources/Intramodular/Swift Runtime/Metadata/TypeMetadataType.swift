@@ -67,7 +67,7 @@ extension TypeMetadataType {
         guard let superclass = value.superclass else {
             return nil
         }
-        
+                
         return .init(_unsafe: superclass.value)
     }
     

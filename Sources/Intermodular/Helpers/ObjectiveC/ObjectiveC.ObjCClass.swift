@@ -2,6 +2,7 @@
 // Copyright (c) Vatsal Manot
 //
 
+import Foundation
 import ObjectiveC
 import Swallow
 
@@ -234,7 +235,13 @@ extension ObjCClass: Named, NameInitiable {
         if let value = objc_getClass(name) as? AnyClass {
             self.init(value)
         } else {
-            self.init(objc_allocateClassPair(superclass.value, name, extraByteCount)!)
+            guard let `class` = objc_allocateClassPair(superclass.value, name, extraByteCount) else {
+                self.init(NSClassFromString(name)!)
+                
+                return
+            }
+            
+            self.init(`class`)
             
             register()
         }
