@@ -20,16 +20,18 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "RuntimeShims",
+            path: "Sources/RuntimeShims"
+        ),
+        .target(
             name: "Runtime",
             dependencies: [
                 "Compute",
                 "FoundationX",
+                "RuntimeShims",
                 "Swallow"
             ],
-            path: "Sources",
-            swiftSettings: [
-                .unsafeFlags(["-Onone"])
-            ]
+            path: "Sources/Runtime"
         )
     ]
 )
