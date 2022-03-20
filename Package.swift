@@ -11,7 +11,7 @@ let package = Package(
         .watchOS(.v6)
     ],
     products: [
-        .library(name: "Runtime", targets: ["Runtime"])
+        .library(name: "Runtime", targets: ["RuntimeShims", "Runtime"])
     ],
     dependencies: [
         .package(url: "https://github.com/vmanot/Compute.git", .branch("master")),

@@ -3,3 +3,4 @@
 //
 
 @_exported import ObjectiveC
+@_exported import RuntimeShims
