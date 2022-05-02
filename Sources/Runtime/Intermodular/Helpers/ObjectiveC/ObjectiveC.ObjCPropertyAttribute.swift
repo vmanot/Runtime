@@ -129,7 +129,7 @@ extension ObjCPropertyAttribute: CustomDebugStringConvertible {
 
 extension ObjCPropertyAttribute: CustomStringConvertible {
     public var description: String {
-        return key + value.initializedIfNil
+        key + (value ?? .init())
     }
 }
 

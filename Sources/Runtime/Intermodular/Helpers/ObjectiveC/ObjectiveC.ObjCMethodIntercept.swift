@@ -38,9 +38,7 @@ public final class ObjCMethodSendIntercept: ObjCMethodIntercept {
         super.init(object: object, selector: selector)
 
         object.objc_withCriticalScope {
-            $0.methodSendIntercepts[selector]
-                .initializedIfNil
-                .append(self)
+            $0.methodSendIntercepts[selector, default: .init()].append(self)
         }
     }
 
@@ -66,9 +64,7 @@ public final class ObjCMethodInvocationIntercept: ObjCMethodIntercept {
         super.init(object: object, selector: selector)
 
         object.objc_withCriticalScope {
-            $0.methodInvocationIntercepts[selector]
-                .initializedIfNil
-                .append(self)
+            $0.methodInvocationIntercepts[selector, default: .init()].append(self)
         }
     }
 

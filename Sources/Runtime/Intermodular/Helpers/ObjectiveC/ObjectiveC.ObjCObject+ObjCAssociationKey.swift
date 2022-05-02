@@ -61,12 +61,12 @@ private let objectAssociationMapKey = ObjCAssociationKey<[String: ObjCAssociatio
 
 extension ObjCObject {
     public var associatedObjectView: ObjCAssociatedObjectView<Self> {
-        return .init(of: self)
+        .init(of: self)
     }
     
     public var objectAssociationMap: [String: ObjCAssociationKey<Any>] {
         get {
-            return associatedObjectView.value(forKey: objectAssociationMapKey).initializedIfNil
+            associatedObjectView.value(forKey: objectAssociationMapKey) ?? .init()
         } set {
             associatedObjectView.setValue(newValue, forKey: objectAssociationMapKey)
         }

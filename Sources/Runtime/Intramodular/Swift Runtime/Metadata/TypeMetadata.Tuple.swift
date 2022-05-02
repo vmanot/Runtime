@@ -51,7 +51,7 @@ extension TypeMetadata {
                 self = Runtime.concatenate(types[atDistance: 0], types[atDistance: 1], types[atDistance: 2], types[atDistance: 3], types[atDistance: 4], types[atDistance: 5])
 
             default:
-                self = types.fauxRandomAccessView.reduce({ .init(Runtime.concatenate($0.base, $1.base)) }).forceUnwrap() // ugly workaround
+                self = Array(types).reduce({ .init(Runtime.concatenate($0.base, $1.base)) }).forceUnwrap() // ugly workaround
         }
     }
     

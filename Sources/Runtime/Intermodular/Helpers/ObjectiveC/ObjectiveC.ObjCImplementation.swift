@@ -19,11 +19,17 @@ extension ObjCImplementation {
     public var blockView: ObjCBlock? {
         @inlinable
         get {
-            return ObjCBlock(nilIfNil: imp_getBlock(value) as? ObjCObject)
+            if let object = imp_getBlock(value) as? ObjCObject {
+                return ObjCBlock(object)
+            } else {
+                return nil
+            }
         } set {
-            _ = newValue
-                .map({ value = imp_implementationWithBlock($0.value) })
-                .or(try! removeBlock())
+            if let newValue = newValue {
+                value = imp_implementationWithBlock(newValue)
+            } else {
+                try! removeBlock()
+            }
         }
     }
     
@@ -46,9 +52,7 @@ extension ObjCMethod {
     public var implementation: ObjCImplementation {
         get {
             return .init(method_getImplementation(value))
-        }
-        
-        nonmutating set {
+        } nonmutating set {
             method_setImplementation(value, newValue.value)
         }
     }
