@@ -19,7 +19,7 @@ extension ObjCMethodInvocation {
     }
 }
 
-extension ObjCMethodInvocation.Payload: Collection2, CustomStringConvertible, ImplementationForwardingWrapper {
+extension ObjCMethodInvocation.Payload: Collection {
     public typealias Element = Value.Element
     public typealias Index = Value.Index
     public typealias Iterator = Value.Iterator
@@ -30,11 +30,31 @@ extension ObjCMethodInvocation.Payload: Collection2, CustomStringConvertible, Im
         return [.init(target), .init(selector)] + arguments
     }
     
+    public var startIndex: Index {
+        value.startIndex
+    }
+    
+    public var endIndex: Index {
+        value.endIndex
+    }
+        
     public init(_ value: Value) {
         self.init(
             target: try! cast(value[0]),
             selector: try! cast(value[1]),
             arguments: .init(value.dropFirst(2))
         )
+    }
+        
+    public func makeIterator() -> Iterator {
+        value.makeIterator()
+    }
+    
+    public subscript(position: Index) -> Element {
+        value[position]
+    }
+
+    public subscript(bounds: Range<Index>) -> SubSequence {
+        value[bounds]
     }
 }

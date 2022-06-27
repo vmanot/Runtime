@@ -7,7 +7,7 @@ import Swallow
 extension Array: CopyOnWrite {
     public var isUniquelyReferenced: Bool {
         mutating get {
-            return isKnownUniquelyReferenced(&UnsafeMutablePointer.to(&self).assumingMemoryBound(to: AnyObject.self).pointee)
+            isKnownUniquelyReferenced(&UnsafeMutablePointer.to(&self).assumingMemoryBound(to: AnyObject.self).pointee)
         }
     }
 
@@ -19,7 +19,7 @@ extension Array: CopyOnWrite {
 extension ContiguousArray: CopyOnWrite {
     public var isUniquelyReferenced: Bool {
         mutating get {
-            return isKnownUniquelyReferenced(&UnsafeMutablePointer.to(&self).assumingMemoryBound(to: AnyObject.self).pointee)
+            isKnownUniquelyReferenced(&UnsafeMutablePointer.to(&self).assumingMemoryBound(to: AnyObject.self).pointee)
         }
     }
 
@@ -31,7 +31,7 @@ extension ContiguousArray: CopyOnWrite {
 extension Dictionary: CopyOnWrite {
     public var isUniquelyReferenced: Bool {
         mutating get {
-            return isKnownUniquelyReferenced(&UnsafeMutablePointer.to(&self).assumingMemoryBound(to: AnyObject.self).pointee)
+            isKnownUniquelyReferenced(&UnsafeMutablePointer.to(&self).assumingMemoryBound(to: AnyObject.self).pointee)
         }
     }
 
@@ -43,7 +43,7 @@ extension Dictionary: CopyOnWrite {
 extension Set: CopyOnWrite {
     public var isUniquelyReferenced: Bool {
         mutating get {
-            return isKnownUniquelyReferenced(&UnsafeMutablePointer.to(&self).assumingMemoryBound(to: AnyObject.self).pointee)
+            isKnownUniquelyReferenced(&UnsafeMutablePointer.to(&self).assumingMemoryBound(to: AnyObject.self).pointee)
         }
     }
 
