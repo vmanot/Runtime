@@ -15,9 +15,6 @@ import Swallow
 
     func retainArguments()
 
-    func setTarget(_: AnyObject)
-    func setSelector(_: Selector)
-
     func getReturnValue(_: UnsafeMutableRawPointer)
     func setReturnValue(_: UnsafeMutableRawPointer)
 

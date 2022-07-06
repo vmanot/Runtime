@@ -25,7 +25,7 @@ extension ObjCMethodInvocation {
             .enumerated()
             .forEach({ invocation.setArgument($1, atIndex: $0) })
         
-        invocation.setTarget(payload.target)
+        invocation.target = payload.target
         
         payload
             .enumerated()
