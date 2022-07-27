@@ -142,15 +142,25 @@ extension ObjCClass: ExtensibleSequence {
         try insert(instanceVariable, name: instanceVariable.name)
     }
     
-    public func insert(_ instanceVariable: ObjCInstanceVariable, name: String) throws {
-        try class_addIvar(
+    public func insert(
+        _ instanceVariable: ObjCInstanceVariable,
+        name: String
+    ) throws {
+        enum InsertionFailure: Error {
+            case failedToInsert(ObjCInstanceVariable)
+        }
+        
+        let didInsert = class_addIvar(
             value,
             name.nullTerminatedUTF8String().value,
             instanceVariable.typeEncoding.sizeInBytes,
             .init(log2(Double(instanceVariable.typeEncoding.alignmentInBytes))),
             instanceVariable.typeEncoding.value
         )
-        .throw(if: ==false)
+        
+        if !didInsert  {
+            throw InsertionFailure.failedToInsert(instanceVariable)
+        }
     }
     
     public static func += (lhs: ObjCClass, rhs: ObjCInstanceVariable) {
