@@ -15,7 +15,7 @@ public func catchExceptionAsError<Output>(in block: (() throws -> Output)) throw
     }
 }
 
-public struct ExceptionError: CustomNSError {
+public struct ExceptionError: CustomNSError, @unchecked Sendable {
     public let exception: NSException
     public let domain = "com.vmanot.Runtime.catch-exception"
     public let errorUserInfo: [String: Any]

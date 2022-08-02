@@ -6,10 +6,10 @@ import Foundation
 import Swallow
 
 public protocol ObjectiveCBridgee {
-    associatedtype SwiftType: _ObjectiveCBridgeable where SwiftType._ObjectiveCType == Self
+    associatedtype SwiftType: _ObjectiveCBridgeable
 }
 
-extension DataEncodable where Self: ObjectiveCBridgee, Self.SwiftType: DataEncodable, Self.DataEncodingStrategy == Self.SwiftType.DataEncodingStrategy {
+extension DataEncodable where Self: ObjectiveCBridgee, Self.SwiftType: DataEncodable, Self.DataEncodingStrategy == Self.SwiftType.DataEncodingStrategy, SwiftType._ObjectiveCType == Self {
     public func data(using strategy: DataEncodingStrategy) throws -> Data {
         return try SwiftType
             ._conditionallyBridgeFromObjectiveC(self)
@@ -24,7 +24,7 @@ extension DataEncodable where Self: ObjectiveCBridgee, Self.SwiftType: DataEncod
     }
 }
 
-extension DataDecodable where Self: ObjectiveCBridgee, Self.SwiftType: DataDecodable, Self.DataDecodingStrategy == Self.SwiftType.DataDecodingStrategy {
+extension DataDecodable where Self: ObjectiveCBridgee, Self.SwiftType: DataDecodable, Self.DataDecodingStrategy == Self.SwiftType.DataDecodingStrategy, SwiftType._ObjectiveCType == Self {
     public init(data: Data, using strategy: DataDecodingStrategy) throws {
         self = try SwiftType(data: data, using: strategy)._bridgeToObjectiveC()
     }
