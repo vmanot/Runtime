@@ -49,6 +49,7 @@ extension ObjCAssociationKey: RawValueConvertible {
 
 public struct ObjCAssociation<Object: ObjCObject, AssociatedValue> {
     private weak var object: Object?
+    
     private let key: ObjCAssociationKey<AssociatedValue>
     
     public init(object: Object?, key: ObjCAssociationKey<AssociatedValue>) {

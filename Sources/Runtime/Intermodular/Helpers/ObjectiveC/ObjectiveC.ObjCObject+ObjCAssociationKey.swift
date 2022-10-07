@@ -101,9 +101,14 @@ extension ObjCObject {
     }
 
     @discardableResult
-    public func associateRuntimeValue<Value>(_ value: Value, policy: ObjCAssociationPolicy = .retain) -> ObjCAssociation<Self, Value>  {
+    public func associateRuntimeValue<Value>(
+        _ value: Value,
+        policy: ObjCAssociationPolicy = .retain
+    ) -> ObjCAssociation<Self, Value>  {
         let key = ObjCAssociationKey<Value>(policy: policy)
+        
         self[key] = value
+        
         return .init(object: self, key: key)
     }
 }
