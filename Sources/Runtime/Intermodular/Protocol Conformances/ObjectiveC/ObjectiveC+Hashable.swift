@@ -5,6 +5,6 @@
 import ObjectiveC
 import Swallow
 
-extension Selector: _opaque_Hashable {
+extension Selector {
     
 }

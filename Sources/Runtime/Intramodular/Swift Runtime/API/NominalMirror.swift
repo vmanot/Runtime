@@ -47,7 +47,7 @@ extension NominalMirror {
     }
 }
 
-// MARK: - Auxiliary Implementation -
+// MARK: - Auxiliary -
 
 extension NominalMirror {
     public init?(_ value: AnyNominalOrTupleMirror) {

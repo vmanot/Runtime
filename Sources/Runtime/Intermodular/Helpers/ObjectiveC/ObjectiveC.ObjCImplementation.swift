@@ -5,7 +5,7 @@
 import ObjectiveC
 import Swallow
 
-public struct ObjCImplementation: _opaque_Hashable, Hashable {
+public struct ObjCImplementation: Hashable {
     public typealias Value = IMP
     
     public var value: Value

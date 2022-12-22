@@ -12,15 +12,15 @@ public struct NominalTypeMetadata: NominalTypeMetadataType {
     public let base: Any.Type
     
     public var mangledName: String {
-        (TypeMetadata(base).typed as! _opaque_NominalTypeMetadataType).mangledName
+        (TypeMetadata(base).typed as! any NominalTypeMetadataType).mangledName
     }
     
     public var fields: [Field] {
-        return (TypeMetadata(base).typed as! _opaque_NominalTypeMetadataType).fields
+        return (TypeMetadata(base).typed as! any NominalTypeMetadataType).fields
     }
     
     public init?(_ base: Any.Type) {
-        guard TypeMetadata(base).typed is _opaque_NominalTypeMetadataType else {
+        guard TypeMetadata(base).typed is any NominalTypeMetadataType else {
             return nil
         }
         

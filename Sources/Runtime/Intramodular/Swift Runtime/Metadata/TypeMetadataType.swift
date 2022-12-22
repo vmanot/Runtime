@@ -4,15 +4,8 @@
 
 import Swallow
 
-public protocol _opaque_TypeMetadataType: _opaque_Hashable {
-    var base: Any.Type { get }
-    
-    init(_unsafe base: Any.Type)
-    init?(_ base: Any.Type)
-}
-
 /// A `TypeMetadata`-like type.
-public protocol TypeMetadataType: _opaque_TypeMetadataType, Hashable {
+public protocol TypeMetadataType: Hashable {
     var base: Any.Type { get }
     
     /// The supertype of this type, if any.
@@ -22,16 +15,8 @@ public protocol TypeMetadataType: _opaque_TypeMetadataType, Hashable {
     init?(_ base: Any.Type)
 }
 
-public protocol _opaque_NominalTypeMetadataType: _opaque_TypeMetadataType {
-    /// The mangled name of this type.
-    var mangledName: String { get }
-    
-    /// The field layout of this type.
-    var fields: [NominalTypeMetadata.Field] { get }
-}
-
 /// A `NominalTypeMetadata`-like type.
-public protocol NominalTypeMetadataType: _opaque_NominalTypeMetadataType, CustomStringConvertible, TypeMetadataType {
+public protocol NominalTypeMetadataType: CustomStringConvertible, TypeMetadataType {
     var mangledName: String { get }
     
     var supertypeFields: [NominalTypeMetadata.Field]? { get }

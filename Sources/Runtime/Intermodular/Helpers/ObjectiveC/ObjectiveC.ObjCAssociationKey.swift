@@ -45,7 +45,7 @@ extension ObjCAssociationKey: RawValueConvertible {
     }
 }
 
-// MARK: - Auxiliary Implementation -
+// MARK: - Auxiliary -
 
 public struct ObjCAssociation<Object: ObjCObject, AssociatedValue> {
     private weak var object: Object?
