@@ -26,7 +26,7 @@ extension ObjCClass {
     }
     
     public var metaClass: ObjCClass? {
-        return (-?>objc_getMetaClass(name)).map({ .init($0) })
+        objc_getMetaClass(name).flatMap({ $0 as? AnyClass }).map({ ObjCClass($0) })
     }
     
     public var superclass: ObjCClass? {
