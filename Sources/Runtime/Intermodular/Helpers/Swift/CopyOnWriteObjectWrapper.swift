@@ -5,7 +5,7 @@
 import Swallow
 
 public struct CopyOnWriteObjectWrapper<T: AnyObject> {
-    private var object: HeapWrapper<T>
+    private var object: ReferenceBox<T>
     private var duplicator: ((inout T) -> T)
     
     public init(_ object: T, duplicator: (@escaping (inout T) -> T)) {

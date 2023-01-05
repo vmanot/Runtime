@@ -6,7 +6,7 @@ import ObjectiveC
 import Swallow
 
 public struct ObjCAssociationKey<T> {
-    private let storage: HeapWrapper<ObjCAssociationPolicy>
+    private let storage: ReferenceBox<ObjCAssociationPolicy>
     
     public var policy: ObjCAssociationPolicy {
         return storage.value
