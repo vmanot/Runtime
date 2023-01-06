@@ -114,7 +114,7 @@ extension OpaqueExistentialContainer: ObjCCodable {
     public func encodeObjCValueToRawBuffer() -> UnsafeMutableRawPointer {
         if type.base is AnyClass {
             return UnsafePointer
-                .allocate(initializingTo: -*>buffer.value.0! as AnyObject)
+                .allocate(initializingTo: unsafeBitCast(buffer.value.0!, to: AnyObject.self))
                 .mutableRawRepresentation
         } else if let value = takeUnretainedValue() as? ObjCCodable {
             return value.encodeObjCValueToRawBuffer()
