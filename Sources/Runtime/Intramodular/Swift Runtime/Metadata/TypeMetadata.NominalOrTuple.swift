@@ -36,8 +36,4 @@ public struct NominalOrTupleTypeMetadata: TypeMetadataType {
             return nil
         }
     }
-    
-    public static func of(_ value: Any) -> Self {
-        Self(type(of: value))!
-    }
 }

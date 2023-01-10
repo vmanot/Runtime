@@ -6,7 +6,9 @@ import Swallow
 
 public struct AnyNominalOrTupleMirror: MirrorType, FailableWrapper {
     public var value: Any
-    public var typeMetadata: TypeMetadata.NominalOrTuple
+    public let typeMetadata: TypeMetadata.NominalOrTuple
+    
+    private let _cachedFieldsByName: [AnyStringKey: NominalTypeMetadata.Field]
     
     public var supertypeMirror: AnyNominalOrTupleMirror? {
         guard let supertypeMetadata = typeMetadata.supertypeMetadata else {
@@ -25,6 +27,7 @@ public struct AnyNominalOrTupleMirror: MirrorType, FailableWrapper {
     ) {
         self.value = value
         self.typeMetadata = typeMetadata
+        self._cachedFieldsByName = Dictionary(OrderedDictionary(values: typeMetadata.fields, uniquelyKeyedBy: { AnyStringKey(stringValue: $0.name) }))
     }
     
     public init(unchecked value: Value) {
@@ -92,15 +95,22 @@ extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
     
     public subscript(_ key: AnyStringKey) -> Any? {
         get {
-            return typeMetadata
-                .allFields
-                .first(where: { $0.key == key })
-                .map({ self[$0] })
+            fieldForKey(key).map({ self[$0] })
         } set {
-            let field = typeMetadata.allFields.first(where: { $0.key == key })!
+            guard let field = fieldForKey(key) else {
+                return
+            }
             
-            self[field] = try! newValue.unwrap()
+            guard let newValue = newValue else {
+                return assertionFailure()
+            }
+            
+            self[field] = newValue
         }
+    }
+    
+    private func fieldForKey(_ key: AnyStringKey) -> NominalTypeMetadata.Field? {
+        _cachedFieldsByName[key] ?? typeMetadata.allFields.first(where: { $0.key == key })
     }
 }
 
@@ -117,7 +127,7 @@ extension AnyNominalOrTupleMirror: Sequence {
         guard let supertypeMirror = supertypeMirror else {
             return children
         }
-
+        
         return .init(supertypeMirror.allChildren.join(children))
     }
     
