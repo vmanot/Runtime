@@ -195,7 +195,9 @@ extension ObjCTypeCoder {
             encoding.removeFirst()
             
             if !rule.suffix.isEmpty {
-                encoding.tryRemoveLast()
+                if encoding.last != nil {
+                    encoding.removeLast()
+                }
             }
             
             if let unitValue = encoding.leftValue {

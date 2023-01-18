@@ -12,7 +12,7 @@ extension Array: CopyOnWrite {
     }
 
     public mutating func makeUniquelyReferenced() {
-        self = .init(fauxRandomAccessView)
+        self = Array(self)
     }
 }
 
@@ -24,7 +24,7 @@ extension ContiguousArray: CopyOnWrite {
     }
 
     public mutating func makeUniquelyReferenced() {
-        self = .init(fauxRandomAccessView)
+        self = ContiguousArray(self)
     }
 }
 
@@ -36,7 +36,7 @@ extension Dictionary: CopyOnWrite {
     }
 
     public mutating func makeUniquelyReferenced() {
-        self = .init(fauxRandomAccessView)
+        self = Dictionary(self)
     }
 }
 
@@ -48,6 +48,6 @@ extension Set: CopyOnWrite {
     }
 
     public mutating func makeUniquelyReferenced() {
-        self = .init(fauxRandomAccessView)
+        self = Set(self)
     }
 }

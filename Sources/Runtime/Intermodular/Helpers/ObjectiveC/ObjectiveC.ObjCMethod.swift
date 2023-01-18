@@ -43,7 +43,7 @@ extension ObjCMethod {
     public var argumentTypes: [ObjCTypeEncoding] {
         return (0..<method_getNumberOfArguments(value))
             .lazy
-            .map(bind(method_copyArgumentType, value))
+            .map({ method_copyArgumentType(value, $0) })
             .map({ String(utf8String: $0, deallocate: true)! })
             .map({ .init($0) })
     }
