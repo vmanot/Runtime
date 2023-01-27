@@ -13,16 +13,16 @@ extension ObjCObject {
             objc_setAssociatedObject(self, key, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
-
+    
     public subscript(associated key: UnsafeRawPointer, default defaultValue: @autoclosure () -> Any) -> Any {
         get {
             if let result = objc_getAssociatedObject(self, key) {
                 return result
             } else {
                 let result = defaultValue()
-
+                
                 objc_setAssociatedObject(self, key, result, .OBJC_ASSOCIATION_RETAIN)
-
+                
                 return result
             }
         } set {
@@ -39,7 +39,7 @@ extension ObjCObject {
             associatedObjectView[key] = newValue
         }
     }
-
+    
     public subscript<T>(key: ObjCAssociationKey<T>, default defaultValue: @autoclosure () -> T) -> T {
         get {
             if let result = associatedObjectView[key] {
@@ -73,33 +73,33 @@ extension ObjCObject {
     }
     
     public subscript(associationKeyForString string: String) -> ObjCAssociationKey<Any> {
-        return objectAssociationMap[string].defaulting(to: ObjCAssociationKey<Any>())
+        objectAssociationMap[string, defaultInPlace: ObjCAssociationKey<Any>()]
     }
-
+    
     public subscript(associated key: String) -> Any? {
         get {
-            return associatedObjectView[self[associationKeyForString: key]]
+            associatedObjectView[self[associationKeyForString: key]]
         } set {
             associatedObjectView[self[associationKeyForString: key]] = newValue
         }
     }
-
+    
     public subscript<T>(associated key: String, _ type: T.Type) -> T? {
         get {
-            return self[self[associationKeyForString: key]].map({ $0 as! T })
+            self[self[associationKeyForString: key]].map({ $0 as! T })
         } set {
             self[self[associationKeyForString: key]] = newValue
         }
     }
-
+    
     public subscript<T>(associated key: String, default defaultValue: @autoclosure () -> T) -> T {
         get {
-            return self[self[associationKeyForString: key], default: defaultValue()] as! T
+            self[self[associationKeyForString: key], default: defaultValue()] as! T
         } set {
             self[self[associationKeyForString: key]] = newValue
         }
     }
-
+    
     @discardableResult
     public func associateRuntimeValue<Value>(
         _ value: Value,
@@ -127,23 +127,23 @@ extension ObjCObject {
             return result
         }
     }
-
+    
     public subscript<T>(associatedWith hashable: AnyHashable) -> T? {
         get {
-            return self[associationKey(for: hashable)]
+            self[associationKey(for: hashable)]
         } set {
             self[associationKey(for: hashable)] = newValue
         }
     }
-
+    
     public subscript<T>(associatedWith hashables: AnyHashable...) -> T? {
         get {
-            return self[associatedWith: hashables]
+            self[associatedWith: hashables]
         } set {
             self[associatedWith: hashables] = newValue
         }
     }
-
+    
     public subscript<T>(associatedWith hashable: AnyHashable, default defaultValue: @autoclosure () -> T) -> T {
         get {
             if let result: T = self[associatedWith: hashable] {
@@ -157,10 +157,10 @@ extension ObjCObject {
             self[associatedWith: hashable] = newValue
         }
     }
-
+    
     public subscript<T>(associatedWith hashables: AnyHashable..., default defaultValue: @autoclosure () -> T) -> T {
         get {
-            return self[associatedWith: hashables, default: defaultValue()]
+            self[associatedWith: hashables, default: defaultValue()]
         } set {
             self[associatedWith: hashables, default: defaultValue()] = newValue
         }
@@ -172,15 +172,15 @@ private var staticAssociationMap: [AnyHashable: Any] = [:]
 extension ObjCClass {
     public subscript<T>(_ key: ObjCAssociationKey<T>) -> T? {
         get {
-            return staticAssociationMap[key].map { $0 as! T }
+            staticAssociationMap[key].map { $0 as! T }
         } nonmutating set {
             staticAssociationMap[key] = newValue
         }
     }
-
+    
     public subscript<T>(_ key: ObjCAssociationKey<T>, default defaultValue: @autoclosure () -> T) -> T {
         get {
-            return staticAssociationMap[key].map({ $0 as! T }) ?? defaultValue()
+            staticAssociationMap[key].map({ $0 as! T }) ?? defaultValue()
         } nonmutating set {
             staticAssociationMap[key] = newValue
         }

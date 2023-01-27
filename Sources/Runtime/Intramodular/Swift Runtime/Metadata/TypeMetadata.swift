@@ -23,3 +23,24 @@ extension TypeMetadata: MetatypeRepresentable {
         return base
     }
 }
+
+/// Returns whether a given value is a type of a type.
+///
+/// ```swift
+/// isMetatype(Int.self) // false
+/// isMetatype(Int.Type.self) // true
+/// ```
+public func isTypeOfAType<T>(_ x: T) -> Bool {
+    guard let type = x as? Any.Type else {
+        return false
+    }
+    
+    let metadata = TypeMetadata(type)
+    
+    switch metadata.kind {
+        case .metatype, .existentialMetatype:
+            return true
+        default:
+            return false
+    }
+}
