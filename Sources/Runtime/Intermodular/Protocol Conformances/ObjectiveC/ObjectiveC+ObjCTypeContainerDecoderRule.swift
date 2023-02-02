@@ -10,7 +10,7 @@ public struct ObjCTypeContainerDecoderRuleForNoRule: ObjCTypeContainerDecoderRul
     public static let suffix = ""
     
     public static func process(_ types: [Any.Type]) -> Any.Type {
-        return TypeMetadata(tupleWithTypes: types).base
+        TypeMetadata(tupleWithTypes: types).base
     }
 }
 
@@ -19,7 +19,7 @@ public struct ObjCTypeContainerDecoderRuleForArray: ObjCTypeContainerDecoderRule
     public static let suffix = "]"
     
     public static func process(_ types: [Any.Type]) -> Any.Type {
-        return TypeMetadata(tupleWithTypes: types).base
+        TypeMetadata(tupleWithTypes: types).base
     }
 }
 
@@ -28,7 +28,7 @@ public struct ObjCTypeContainerDecoderRuleForConstantPointer: ObjCTypeContainerD
     public static let suffix = ""
     
     public static func process(_ types: [Any.Type]) -> Any.Type {
-        return extend(TypeMetadata(tupleWithTypes: types).base).UnsafePointer_Self()
+        _extendMetatype(TypeMetadata(tupleWithTypes: types).base).UnsafePointer_Self()
     }
 }
 
@@ -37,7 +37,7 @@ public struct ObjCTypeContainerDecoderRuleForPointer: ObjCTypeContainerDecoderRu
     public static let suffix = ""
     
     public static func process(_ types: [Any.Type]) -> Any.Type {
-        return extend(TypeMetadata(tupleWithTypes: types).base).UnsafeMutablePointer_Self()
+        _extendMetatype(TypeMetadata(tupleWithTypes: types).base).UnsafeMutablePointer_Self()
     }
 }
 
@@ -46,7 +46,7 @@ public struct ObjCTypeContainerDecoderRuleForStructure: ObjCTypeContainerDecoder
     public static let suffix = "}"
     
     public static func process(_ types: [Any.Type]) -> Any.Type {
-        return TypeMetadata(tupleWithTypes: types).base
+        TypeMetadata(tupleWithTypes: types).base
     }
 }
 
@@ -55,6 +55,6 @@ public struct ObjCTypeContainerDecoderRuleForUnion: ObjCTypeContainerDecoderRule
     public static let suffix = ")"
     
     public static func process(_ types: [Any.Type]) -> Any.Type {
-        return (types.lazy.map({ TypeMetadata($0) }).sorted(by: { $0.memoryLayout.stride < $1.memoryLayout.stride }).last ?? TypeMetadata(Void.self)).byteTupleRepresentation.base
+        (types.lazy.map({ TypeMetadata($0) }).sorted(by: { $0.memoryLayout.stride < $1.memoryLayout.stride }).last ?? TypeMetadata(Void.self)).byteTupleRepresentation.base
     }
 }

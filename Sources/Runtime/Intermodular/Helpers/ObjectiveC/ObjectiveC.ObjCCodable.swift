@@ -40,7 +40,7 @@ extension Trivial where Self: ObjCCodable {
     }
     
     public func encodeObjCValueToRawBuffer() -> UnsafeMutableRawPointer {
-        return .initializing(from: readOnly.unsafeRawBytes)
+        .initializing(from: bytes)
     }
 }
 

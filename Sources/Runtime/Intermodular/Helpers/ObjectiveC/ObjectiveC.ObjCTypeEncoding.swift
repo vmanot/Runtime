@@ -20,11 +20,11 @@ public struct ObjCTypeEncoding: Hashable, Wrapper {
 // MARK: - Extensions -
 
 extension ObjCTypeEncoding {
-    public static var unknown = _Self("?")
-    public static var void = _Self("v")
+    public static var unknown = Self("?")
+    public static var void = Self("v")
     
     public var isSizeZero: Bool {
-        return self == .void || toTypeMetadata().isSizeZero
+        self == .void || toTypeMetadata().isSizeZero
     }
     
     public var losingNominalPrecision: ObjCTypeEncoding {

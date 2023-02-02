@@ -5,7 +5,7 @@
 import Swallow
 
 protocol OpaqueExistentialContainerInterface {
-
+    
 }
 
 extension OpaqueExistentialContainerInterface {
@@ -19,12 +19,12 @@ extension OpaqueExistentialContainerInterface {
             assert(TypeMetadata(self).isSizeZero)
         }
     }
-
+    
     static func withUnsafeBytesOfValue<T>(of value: Any, _ body: ((UnsafeRawBufferPointer) throws -> T)) rethrows -> T {
         var _value = value as! Self
         return try withUnsafeBytes(of: &_value, body)
     }
-
+    
     static func withUnsafeMutableBytesOfValue<T>(of value: inout Any, _ body: ((UnsafeMutableRawBufferPointer) throws -> T)) rethrows -> T {
         var _value = value as! Self
         
@@ -46,7 +46,7 @@ extension OpaqueExistentialContainerInterface {
             return OpaqueExistentialContainer(unitialized: type)
         }
     }
-
+    
     static func assignValue(_ value: Any, to address: UnsafeMutableRawPointer?) {
         if let address = address {
             address.assumingMemoryBound(to: self).assign(to: value as! Self)
@@ -54,7 +54,7 @@ extension OpaqueExistentialContainerInterface {
             assert(TypeMetadata(self).isSizeZero)
         }
     }
-
+    
     static func initializeValue(at address: UnsafeMutableRawPointer?, to value: Any) {
         if let address = address {
             address.assumingMemoryBound(to: self).initialize(to: value as! Self)
@@ -62,7 +62,7 @@ extension OpaqueExistentialContainerInterface {
             assert(TypeMetadata(self).isSizeZero)
         }
     }
-
+    
     static func reinitializeValue(at address: UnsafeMutableRawPointer?, to value: Any) {
         if let address = address {
             address.assumingMemoryBound(to: self).reinitialize(to: value as! Self)
@@ -70,11 +70,11 @@ extension OpaqueExistentialContainerInterface {
             assert(TypeMetadata.of(self).isSizeZero)
         }
     }
-
+    
     static func writeValue(_ value: Any, to address: UnsafeMutableRawPointer) {
         address.assumingMemoryBound(to: Self.self).pointee = value as! Self
     }
-
+    
     static func deinitializeValue(at address: UnsafeMutableRawPointer) {
         address.assumingMemoryBound(to: self).deinitialize(count: 1)
     }
@@ -92,18 +92,18 @@ extension OpaqueExistentialContainer {
             self = .passUnretained(type.opaqueExistentialInterface.copyValue(from: address!.rawRepresentation))
         }
     }
-
+    
     public init<Bytes: RawBufferPointer>(copyingBytesOfValueFrom bytes: Bytes, type: TypeMetadata) {
         self.init(copyingBytesOfValueAt: bytes.baseAddress, type: type)
     }
-
+    
     public init(type: TypeMetadata, unsafeBytesOfValueInitializer: (UnsafeMutableRawBufferPointer) -> ()) {
         let bytes = UnsafeMutableRawBufferPointer.allocate(for: type)
         unsafeBytesOfValueInitializer(bytes)
         self.init(copyingBytesOfValueAt: bytes.baseAddress, type: type)
         bytes.deallocate()
     }
-
+    
     public func assignValue(to address: UnsafeMutableRawPointer?) {
         if let address = address {
             type.opaqueExistentialInterface
@@ -111,10 +111,10 @@ extension OpaqueExistentialContainer {
         } else {
             assert(type.isSizeZero)
         }
-
+        
         release()
     }
-
+    
     public func initializeValue(at address: UnsafeMutableRawPointer?) {
         if let address = address {
             type.opaqueExistentialInterface
@@ -123,7 +123,7 @@ extension OpaqueExistentialContainer {
             assert(type.isSizeZero)
         }
     }
-
+    
     public func reintializeValue(at address: UnsafeMutableRawPointer?) {
         if let address = address {
             type.opaqueExistentialInterface
@@ -132,22 +132,22 @@ extension OpaqueExistentialContainer {
             assert(type.isSizeZero)
         }
     }
-
+    
     public func withUnsafeBytesOfValue<T>(_ body: ((UnsafeRawBufferPointer) throws -> T)) rethrows -> T {
         return try type
             .opaqueExistentialInterface
             .withUnsafeBytesOfValue(of: unretainedValue, body)
     }
-
+    
     public mutating func withUnsafeMutableBytesOfValue<T>(_ body: ((UnsafeMutableRawBufferPointer) throws -> T)) rethrows -> T {
         return try type
             .opaqueExistentialInterface
             .withUnsafeMutableBytesOfValue(of: &unretainedValue, body)
     }
-
+    
     public mutating func deinitializeValue() {
         let interface = type.opaqueExistentialInterface
-
+        
         withUnsafeMutableBytesOfValue {
             interface.deinitializeValue(at: $0.baseAddress!)
         }
@@ -156,35 +156,35 @@ extension OpaqueExistentialContainer {
 
 extension OpaqueExistentialContainer: UnmanagedProtocol {
     public typealias Instance = Any
-
+    
     public static func passUnretained(_ value: Instance) -> OpaqueExistentialContainer {
         if Swift.type(of: value) is AnyClass {
             let type = TypeMetadata.of(value)
             let buffer = Buffer((unsafeBitCast(try! cast(value, to: AnyObject.self)), nil, nil))
-
+            
             return .init(buffer: buffer, type: type)
         } else {
             return unsafeBitCast(value)
         }
     }
-
+    
     public func takeUnretainedValue() -> Instance {
         return unsafeBitCast(self, to: Any.self)
     }
-
+    
     @discardableResult
     public func retain() -> OpaqueExistentialContainer {
         withUnsafeBytesOfValue {
             type.opaqueExistentialInterface.retainValue(at: $0.baseAddress)
         }
-
+        
         return self
     }
-
+    
     public func release() {
         var value: Any = _compiler_opaque(()) // this (reasonably) assumes Void.Type isn't be heap-allocated
         Swift.withUnsafeMutableBytes(of: &value) {
-            $0.baseAddress?.assumingMemoryBound(to: _Self.self).pointee = self
+            $0.baseAddress?.assumingMemoryBound(to: Self.self).pointee = self
         }
     }
 }
@@ -195,9 +195,9 @@ extension TypeMetadata {
             let type: Any.Type
             let witnessTable: Int
         }
-
+        
         let container = ProtocolTypeContainer(type: base, witnessTable: 0)
-
+        
         return unsafeBitCast(container, to: OpaqueExistentialContainerInterface.Type.self)
     }
 }

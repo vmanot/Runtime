@@ -4,166 +4,170 @@
 
 import Swallow
 
-public func extend(_ type: Any.Type) -> AnyProtocol.Type {
-    struct Extensions: AnyProtocol { }
+protocol _ExtendedMetatype {
     
-    var extensions: AnyProtocol.Type = Extensions.self
+}
+
+func _extendMetatype(_ type: Any.Type) -> _ExtendedMetatype.Type {
+    struct Extensions: _ExtendedMetatype { }
+    
+    var extensions: _ExtendedMetatype.Type = Extensions.self
     
     UnsafeMutablePointer<Any.Type>.to(assumingLayoutCompatible: &extensions).pointee = type
     
     return extensions
 }
 
-extension AnyProtocol {
-    private static var t0: Self.Type {
-        return <<infer>>
-    }
-}
-
-extension AnyProtocol {
-    public static func fmake<T>(with _: T.Type) -> AnyProtocol.Type {
-        return extend(ftype((T, Self).self))
+extension _ExtendedMetatype {
+    static func Array_Self() -> Any.Type {
+        Array<Self>.self
     }
     
-    public static func fmake(withUnknown t1: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t1.fmake(with: t0)
-    }
-}
-
-public func fmake(_ t1: Any.Type, _ t2: Any.Type) -> Any.Type {
-    return extend(t1).fmake(withUnknown: extend(t2))
-}
-
-public func fmake(_ t1: TypeMetadata, _ t2: TypeMetadata) -> TypeMetadata.Function {
-    return TypeMetadata.Function(fmake(t1.base, t2.base))!
-}
-
-extension AnyProtocol {
-    public static func concatenate<T>(with _: T.Type) -> AnyProtocol.Type {
-        return extend((T, Self).self)
+    static func UnsafePointer_Self() -> Any.Type {
+        UnsafePointer<Self>.self
     }
     
-    public static func concatenate(withUnknown t1: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t1.concatenate(with: t0)
+    static func UnsafeMutablePointer_Self() -> Any.Type {
+        UnsafeMutablePointer<Self>.self
+    }
+    
+    static var t0: Self.Type {
+        Self.self
+    }
+    
+    static func fmake<T>(with _: T.Type) -> _ExtendedMetatype.Type {
+        _extendMetatype(ftype((T, Self).self))
+    }
+    
+    static func fmake(withUnknown t1: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t1.fmake(with: t0)
+    }
+    
+    static func concatenate<T>(with _: T.Type) -> _ExtendedMetatype.Type {
+        _extendMetatype((T, Self).self)
+    }
+    
+    static func concatenate(withUnknown t1: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t1.concatenate(with: t0)
+    }
+    
+    static func concatenate<T, U>(with _: T.Type, _: U.Type) -> _ExtendedMetatype.Type {
+        _extendMetatype((U, T, Self).self)
+    }
+    
+    static func concatenate<T>(with t1: T.Type, unknown t2: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t2.concatenate(with: t0, t1)
+    }
+    
+    static func concatenate(withUnknown t1: _ExtendedMetatype.Type, _ t2: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t1.concatenate(with: t0, unknown: t2)
+    }
+    
+    static func concatenate<T, U, V>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type) -> _ExtendedMetatype.Type {
+        _extendMetatype((V, U, T, Self).self)
+    }
+    
+    static func concatenate<T, U>(with t1: T.Type, _ t2: U.Type, unknown t3: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t3.concatenate(with: t0, t1, t2)
+    }
+    
+    static func concatenate<T>(with t1: T.Type, unknown t2: _ExtendedMetatype.Type, _ t3: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t2.concatenate(with: t0, t1, unknown: t3)
+    }
+    
+    static func concatenate(withUnknown t1: _ExtendedMetatype.Type, _ t2: _ExtendedMetatype.Type, _ t3: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t1.concatenate(with: t0, unknown: t2, t3)
+    }
+    
+    static func concatenate<T, U, V, W>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, _ t4: W.Type) -> _ExtendedMetatype.Type {
+        _extendMetatype((W, V, U, T, Self).self)
+    }
+    
+    static func concatenate<T, U, V>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, unknown t4: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t4.concatenate(with: t0, t1, t2, t3)
+    }
+    
+    static func concatenate<T, U>(with t1: T.Type, _ t2: U.Type, unknown t3: _ExtendedMetatype.Type, _ t4: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t3.concatenate(with: t0, t1, t2, unknown: t4)
+    }
+    
+    static func concatenate<T>(with t1: T.Type, unknown t2: _ExtendedMetatype.Type, _ t3: _ExtendedMetatype.Type, _ t4: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t2.concatenate(with: t0, t1, unknown: t3, t4)
+    }
+    
+    static func concatenate(withUnknown t1: _ExtendedMetatype.Type, _ t2: _ExtendedMetatype.Type, _ t3: _ExtendedMetatype.Type, _ t4: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t1.concatenate(with: t0, unknown: t2, t3, t4)
+    }
+    
+    static func concatenate<T, U, V, W, X>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, _ t4: W.Type, _ t5: X.Type) -> _ExtendedMetatype.Type {
+        _extendMetatype((X, W, V, U, T, Self).self)
+    }
+    
+    static func concatenate<T, U, V, W>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, _ t4: W.Type, unknown t5: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t5.concatenate(with: t0, t1, t2, t3, t4)
+    }
+    
+    static func concatenate<T, U, V>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, unknown t4: _ExtendedMetatype.Type, _ t5: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t4.concatenate(with: t0, t1, t2, t3, unknown: t5)
+    }
+    
+    static func concatenate<T, U>(with t1: T.Type, _ t2: U.Type, unknown t3: _ExtendedMetatype.Type, _ t4: _ExtendedMetatype.Type, _ t5: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t3.concatenate(with: t0, t1, t2, unknown: t4, t5)
+    }
+    
+    static func concatenate<T>(with t1: T.Type, unknown t2: _ExtendedMetatype.Type, _ t3: _ExtendedMetatype.Type, _ t4: _ExtendedMetatype.Type, _ t5: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t2.concatenate(with: t0, t1, unknown: t3, t4, t5)
+    }
+    
+    static func concatenate(withUnknown t1: _ExtendedMetatype.Type, _ t2: _ExtendedMetatype.Type, _ t3: _ExtendedMetatype.Type, _ t4: _ExtendedMetatype.Type, _ t5: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t1.concatenate(with: t0, unknown: t2, t3, t4, t5)
     }
 }
 
-public func concatenate(_ t1: Any.Type, _ t2: Any.Type) -> Any.Type {
-    return extend(t1).concatenate(withUnknown: extend(t2))
+public func _fmake(_ t1: Any.Type, _ t2: Any.Type) -> Any.Type {
+    _extendMetatype(t1).fmake(withUnknown: _extendMetatype(t2))
 }
 
-public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base)))
+public func _fmake(_ t1: TypeMetadata, _ t2: TypeMetadata) -> TypeMetadata.Function {
+    TypeMetadata.Function(_fmake(t1.base, t2.base))!
 }
 
-extension AnyProtocol {
-    public static func concatenate<T, U>(with _: T.Type, _: U.Type) -> AnyProtocol.Type {
-        return extend((U, T, Self).self)
-    }
-    
-    public static func concatenate<T>(with t1: T.Type, unknown t2: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t2.concatenate(with: t0, t1)
-    }
-    
-    public static func concatenate(withUnknown t1: AnyProtocol.Type, _ t2: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t1.concatenate(with: t0, unknown: t2)
-    }
+public func _concatenate(_ t1: Any.Type, _ t2: Any.Type) -> Any.Type {
+    _extendMetatype(t1).concatenate(withUnknown: _extendMetatype(t2))
 }
 
-public func concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type) -> Any.Type {
-    return extend(t1).concatenate(withUnknown: extend(t2), extend(t3))
+public func _concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata) -> TypeMetadata {
+    .init(_extendMetatype(t1.base).concatenate(withUnknown: _extendMetatype(t2.base)))
 }
 
-public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base), extend(t3.base)))
+public func _concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type) -> Any.Type {
+    _extendMetatype(t1).concatenate(withUnknown: _extendMetatype(t2), _extendMetatype(t3))
 }
 
-extension AnyProtocol {
-    public static func concatenate<T, U, V>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type) -> AnyProtocol.Type {
-        return extend((V, U, T, Self).self)
-    }
-    
-    public static func concatenate<T, U>(with t1: T.Type, _ t2: U.Type, unknown t3: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t3.concatenate(with: t0, t1, t2)
-    }
-    
-    public static func concatenate<T>(with t1: T.Type, unknown t2: AnyProtocol.Type, _ t3: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t2.concatenate(with: t0, t1, unknown: t3)
-    }
-    
-    public static func concatenate(withUnknown t1: AnyProtocol.Type, _ t2: AnyProtocol.Type, _ t3: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t1.concatenate(with: t0, unknown: t2, t3)
-    }
+public func _concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata) -> TypeMetadata {
+    .init(_extendMetatype(t1.base).concatenate(withUnknown: _extendMetatype(t2.base), _extendMetatype(t3.base)))
 }
 
-public func concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: Any.Type) -> Any.Type {
-    return extend(t1).concatenate(withUnknown: extend(t2), extend(t3), extend(t4))
+public func _concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: Any.Type) -> Any.Type {
+    _extendMetatype(t1).concatenate(withUnknown: _extendMetatype(t2), _extendMetatype(t3), _extendMetatype(t4))
 }
 
-public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base), extend(t3.base), extend(t4.base)))
+public func _concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata) -> TypeMetadata {
+    .init(_extendMetatype(t1.base).concatenate(withUnknown: _extendMetatype(t2.base), _extendMetatype(t3.base), _extendMetatype(t4.base)))
 }
 
-extension AnyProtocol {
-    public static func concatenate<T, U, V, W>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, _ t4: W.Type) -> AnyProtocol.Type {
-        return extend((W, V, U, T, Self).self)
-    }
-    
-    public static func concatenate<T, U, V>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, unknown t4: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t4.concatenate(with: t0, t1, t2, t3)
-    }
-    
-    public static func concatenate<T, U>(with t1: T.Type, _ t2: U.Type, unknown t3: AnyProtocol.Type, _ t4: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t3.concatenate(with: t0, t1, t2, unknown: t4)
-    }
-    
-    public static func concatenate<T>(with t1: T.Type, unknown t2: AnyProtocol.Type, _ t3: AnyProtocol.Type, _ t4: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t2.concatenate(with: t0, t1, unknown: t3, t4)
-    }
-    
-    public static func concatenate(withUnknown t1: AnyProtocol.Type, _ t2: AnyProtocol.Type, _ t3: AnyProtocol.Type, _ t4: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t1.concatenate(with: t0, unknown: t2, t3, t4)
-    }
+public func _concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: Any.Type, _ t5: Any.Type) -> Any.Type {
+    _extendMetatype(t1).concatenate(withUnknown: _extendMetatype(t2), _extendMetatype(t3), _extendMetatype(t4), _extendMetatype(t5))
 }
 
-public func concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: Any.Type, _ t5: Any.Type) -> Any.Type {
-    return extend(t1).concatenate(withUnknown: extend(t2), extend(t3), extend(t4), extend(t5))
+public func _concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata, _ t5: TypeMetadata) -> TypeMetadata {
+    .init(_extendMetatype(t1.base).concatenate(withUnknown: _extendMetatype(t2.base), _extendMetatype(t3.base), _extendMetatype(t4.base), _extendMetatype(t5.base)))
 }
 
-public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata, _ t5: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base), extend(t3.base), extend(t4.base), extend(t5.base)))
+public func _concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: Any.Type, _ t5: Any.Type, _ t6: Any.Type) -> Any.Type {
+    _extendMetatype(t1).concatenate(withUnknown: _extendMetatype(t2), _extendMetatype(t3), _extendMetatype(t4), _extendMetatype(t5), _extendMetatype(t6))
 }
 
-extension AnyProtocol {
-    public static func concatenate<T, U, V, W, X>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, _ t4: W.Type, _ t5: X.Type) -> AnyProtocol.Type {
-        return extend((X, W, V, U, T, Self).self)
-    }
-    
-    public static func concatenate<T, U, V, W>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, _ t4: W.Type, unknown t5: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t5.concatenate(with: t0, t1, t2, t3, t4)
-    }
-    
-    public static func concatenate<T, U, V>(with t1: T.Type, _ t2: U.Type, _ t3: V.Type, unknown t4: AnyProtocol.Type, _ t5: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t4.concatenate(with: t0, t1, t2, t3, unknown: t5)
-    }
-    
-    public static func concatenate<T, U>(with t1: T.Type, _ t2: U.Type, unknown t3: AnyProtocol.Type, _ t4: AnyProtocol.Type, _ t5: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t3.concatenate(with: t0, t1, t2, unknown: t4, t5)
-    }
-    
-    public static func concatenate<T>(with t1: T.Type, unknown t2: AnyProtocol.Type, _ t3: AnyProtocol.Type, _ t4: AnyProtocol.Type, _ t5: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t2.concatenate(with: t0, t1, unknown: t3, t4, t5)
-    }
-    
-    public static func concatenate(withUnknown t1: AnyProtocol.Type, _ t2: AnyProtocol.Type, _ t3: AnyProtocol.Type, _ t4: AnyProtocol.Type, _ t5: AnyProtocol.Type) -> AnyProtocol.Type {
-        return t1.concatenate(with: t0, unknown: t2, t3, t4, t5)
-    }
-}
-
-public func concatenate(_ t1: Any.Type, _ t2: Any.Type, _ t3: Any.Type, _ t4: Any.Type, _ t5: Any.Type, _ t6: Any.Type) -> Any.Type {
-    return extend(t1).concatenate(withUnknown: extend(t2), extend(t3), extend(t4), extend(t5), extend(t6))
-}
-
-public func concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata, _ t5: TypeMetadata, _ t6: TypeMetadata) -> TypeMetadata {
-    return .init(extend(t1.base).concatenate(withUnknown: extend(t2.base), extend(t3.base), extend(t4.base), extend(t5.base), extend(t6.base)))
+public func _concatenate(_ t1: TypeMetadata, _ t2: TypeMetadata, _ t3: TypeMetadata, _ t4: TypeMetadata, _ t5: TypeMetadata, _ t6: TypeMetadata) -> TypeMetadata {
+    .init(_extendMetatype(t1.base).concatenate(withUnknown: _extendMetatype(t2.base), _extendMetatype(t3.base), _extendMetatype(t4.base), _extendMetatype(t5.base), _extendMetatype(t6.base)))
 }
