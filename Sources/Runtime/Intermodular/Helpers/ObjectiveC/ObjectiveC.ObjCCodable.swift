@@ -31,7 +31,7 @@ extension ObjCTypeEncodable where Self: ObjCCodable {
 extension Trivial where Self: ObjCCodable {
     public init(decodingObjCValueFromRawBuffer buffer: UnsafeMutableRawPointer?, encoding: ObjCTypeEncoding) {
         if let buffer = buffer {
-            self = buffer.assumingMemoryBound(to: <<infer>>).pointee // FIXME: ?
+            self = buffer.assumingMemoryBound(to: Self.self).pointee // FIXME: ?
         } else {
             assert(encoding.isSizeZero)
             

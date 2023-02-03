@@ -10,7 +10,7 @@ import Swallow
     
 }
 
-// MARK: - Extensions - 
+// MARK: - Extensions -
 
 extension ObjCObject {
     public var objCClass: ObjCClass {
@@ -20,15 +20,11 @@ extension ObjCObject {
     public static var objCClass: ObjCClass {
         return .init(self)
     }
-
-    public func isSelfEqualToInferredSelf(_ selfClass: Self.Type = <<infer>>) -> Bool {
-        return TypeMetadata(objCClass.value) == TypeMetadata(selfClass)
-    }
     
     public func setClass(_ `class`: ObjCClass) -> ObjCClass {
         return .init(object_setClass(self, `class`.value)!)
     }
-
+    
     public func responds(to selector: ObjCSelector) -> Bool {
         return (self as? NSObject)?.responds(to: selector.value) ?? objCClass.responds(to: selector)
     }

@@ -10,8 +10,11 @@ extension ObjCClass: ObjCCodable {
         return .init("{\(name)=#}")
     }
     
-    public init(decodingObjCValueFromRawBuffer buffer: UnsafeMutableRawPointer?, encoding: ObjCTypeEncoding) {
-        self = buffer!.assumingMemoryBound(to: <<infer>>).pointee
+    public init(
+        decodingObjCValueFromRawBuffer buffer: UnsafeMutableRawPointer?,
+        encoding: ObjCTypeEncoding
+    ) {
+        self = .init(buffer!.assumingMemoryBound(to: AnyClass.self).pointee)
     }
     
     public func encodeObjCValueToRawBuffer() -> UnsafeMutableRawPointer {

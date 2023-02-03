@@ -35,12 +35,12 @@ extension _ExtendedMetatype {
         Self.self
     }
     
-    static func fmake<T>(with _: T.Type) -> _ExtendedMetatype.Type {
-        _extendMetatype(ftype((T, Self).self))
+    static func concatenateAsFunctionType<T>(withReturnType _: T.Type) -> _ExtendedMetatype.Type {
+        _extendMetatype(((T) -> Self).self)
     }
     
-    static func fmake(withUnknown t1: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
-        t1.fmake(with: t0)
+    static func concatenateAsFunctionType(withUnknownReturnType t1: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
+        t1.concatenateAsFunctionType(withUnknownReturnType: t0)
     }
     
     static func concatenate<T>(with _: T.Type) -> _ExtendedMetatype.Type {
@@ -124,12 +124,12 @@ extension _ExtendedMetatype {
     }
 }
 
-public func _fmake(_ t1: Any.Type, _ t2: Any.Type) -> Any.Type {
-    _extendMetatype(t1).fmake(withUnknown: _extendMetatype(t2))
+public func _concatenateAsFunctionType(_ t1: Any.Type, returnType t2: Any.Type) -> Any.Type {
+    _extendMetatype(t1).concatenateAsFunctionType(withUnknownReturnType: _extendMetatype(t2))
 }
 
-public func _fmake(_ t1: TypeMetadata, _ t2: TypeMetadata) -> TypeMetadata.Function {
-    TypeMetadata.Function(_fmake(t1.base, t2.base))!
+public func _concatenateAsFunctionType(_ t1: TypeMetadata, returnType t2: TypeMetadata) -> TypeMetadata.Function {
+    TypeMetadata.Function(_concatenateAsFunctionType(t1.base, returnType: t2.base))!
 }
 
 public func _concatenate(_ t1: Any.Type, _ t2: Any.Type) -> Any.Type {
