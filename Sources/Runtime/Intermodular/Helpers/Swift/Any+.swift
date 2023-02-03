@@ -9,16 +9,22 @@ protocol _ExtendedMetatype {
 }
 
 func _extendMetatype(_ type: Any.Type) -> _ExtendedMetatype.Type {
-    struct Extensions: _ExtendedMetatype { }
+    struct _Extended: _ExtendedMetatype {
+        
+    }
     
-    var extensions: _ExtendedMetatype.Type = Extensions.self
+    var result: _ExtendedMetatype.Type = _Extended.self
     
-    UnsafeMutablePointer<Any.Type>.to(assumingLayoutCompatible: &extensions).pointee = type
+    UnsafeMutablePointer<Any.Type>.to(assumingLayoutCompatible: &result).pointee = type
     
-    return extensions
+    return result
 }
 
 extension _ExtendedMetatype {
+    private static var t0: Self.Type {
+        Self.self
+    }
+    
     static func Array_Self() -> Any.Type {
         Array<Self>.self
     }
@@ -31,16 +37,14 @@ extension _ExtendedMetatype {
         UnsafeMutablePointer<Self>.self
     }
     
-    static var t0: Self.Type {
-        Self.self
-    }
-    
     static func concatenateAsFunctionType<T>(withReturnType _: T.Type) -> _ExtendedMetatype.Type {
         _extendMetatype(((T) -> Self).self)
     }
     
-    static func concatenateAsFunctionType(withUnknownReturnType t1: _ExtendedMetatype.Type) -> _ExtendedMetatype.Type {
-        t1.concatenateAsFunctionType(withUnknownReturnType: t0)
+    static func concatenateAsFunctionType(
+        withUnknownReturnType t1: _ExtendedMetatype.Type
+    ) -> _ExtendedMetatype.Type {
+        t1.concatenateAsFunctionType(withReturnType: t0)
     }
     
     static func concatenate<T>(with _: T.Type) -> _ExtendedMetatype.Type {
