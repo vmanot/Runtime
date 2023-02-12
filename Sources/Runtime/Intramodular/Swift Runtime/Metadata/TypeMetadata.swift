@@ -24,13 +24,13 @@ extension TypeMetadata: MetatypeRepresentable {
     }
 }
 
-/// Returns whether a given value is a type of a type.
+/// Returns whether a given value is a type of a type (a metatype).
 ///
 /// ```swift
 /// isMetatype(Int.self) // false
 /// isMetatype(Int.Type.self) // true
 /// ```
-public func isTypeOfAType<T>(_ x: T) -> Bool {
+public func _isMetatypeKind<T>(_ x: T) -> Bool {
     guard let type = x as? Any.Type else {
         return false
     }
