@@ -47,7 +47,7 @@ public struct OpaqueExistentialContainer: CustomDebugStringConvertible {
     }
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension OpaqueExistentialContainer {
     public func getUnretainedValue<T>() -> T {
@@ -57,7 +57,7 @@ extension OpaqueExistentialContainer {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension OpaqueExistentialContainer: MutableContiguousStorage {
     public typealias Element = Byte
@@ -130,7 +130,7 @@ extension OpaqueExistentialContainer: ObjCCodable {
     }
 }
 
-// MARK: - Auxiliary Extensions -
+// MARK: - Auxiliary Extensions
 
 extension Array where Element == OpaqueExistentialContainer {
     public func combineCast(to type: TypeMetadata) throws -> OpaqueExistentialContainer {
@@ -142,7 +142,7 @@ extension Array where Element == OpaqueExistentialContainer {
             return OpaqueExistentialContainer(type: type) { bytes in
                 var offset = 0
                 for element in self {
-                    element.assignValue(to: bytes.baseAddress?.advanced(by: offset))
+                    element.updateValue(at: bytes.baseAddress?.advanced(by: offset))
                     offset += element.type.memoryLayout.size
                 }
             }
@@ -160,7 +160,7 @@ extension Array where Element == OpaqueExistentialContainer {
             return OpaqueExistentialContainer(type: type) { bytes in
                 var offset = 0
                 for element in self {
-                    element.assignValue(to: bytes.baseAddress?.advanced(by: offset))
+                    element.updateValue(at: bytes.baseAddress?.advanced(by: offset))
                     offset += element.type.memoryLayout.size
                 }
             }

@@ -27,7 +27,7 @@ public struct NominalMirror<Subject>: MirrorType {
     }
 }
 
-// MARK: - API -
+// MARK: - API
 
 extension NominalMirror {
     public init(reflecting subject: Subject) {
@@ -47,7 +47,7 @@ extension NominalMirror {
     }
 }
 
-// MARK: - Auxiliary -
+// MARK: - Auxiliary
 
 extension NominalMirror {
     public init?(_ value: AnyNominalOrTupleMirror) {

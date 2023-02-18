@@ -17,7 +17,7 @@ public struct ObjCAssociationKey<Value> {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCAssociationKey: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -45,7 +45,7 @@ extension ObjCAssociationKey: RawValueConvertible {
     }
 }
 
-// MARK: - Auxiliary -
+// MARK: - Auxiliary
 
 public struct ObjCAssociation<Object: ObjCObject, AssociatedValue> {
     private weak var object: Object?

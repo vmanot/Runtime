@@ -16,7 +16,7 @@ public protocol UnmanagedProtocol {
     func release()
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension UnmanagedProtocol {
     public var unretainedValue: Instance {
@@ -67,7 +67,7 @@ extension UnmanagedProtocol {
     }
 }
 
-// MARK: - Implementation -
+// MARK: - Implementation
 
 extension Unmanaged: UnmanagedProtocol {
     

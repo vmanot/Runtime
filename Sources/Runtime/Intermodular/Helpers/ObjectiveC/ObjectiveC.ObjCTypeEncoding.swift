@@ -17,7 +17,7 @@ public struct ObjCTypeEncoding: Hashable, Wrapper {
     }
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension ObjCTypeEncoding {
     public static var unknown = Self("?")
@@ -42,7 +42,7 @@ extension ObjCTypeEncoding {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCTypeEncoding: AdditionOperatable {
     public static func + (lhs: ObjCTypeEncoding, rhs: ObjCTypeEncoding) -> ObjCTypeEncoding {
@@ -74,7 +74,7 @@ extension ObjCTypeEncoding: StringInitiable, StringConvertible {
     }
 }
 
-// MARK: - Auxiliary Extensions -
+// MARK: - Auxiliary Extensions
 
 extension ObjCTypeEncoding {
     public var sizeAndAlignmentInBytes: (size: Int, alignment: Int) {

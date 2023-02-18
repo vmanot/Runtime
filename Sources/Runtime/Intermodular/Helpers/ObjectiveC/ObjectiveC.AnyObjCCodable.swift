@@ -41,7 +41,7 @@ public struct AnyObjCCodable: FailableWrapper {
     }
 }
 
-// MARK: - Conformances - 
+// MARK: - Conformances 
 
 extension AnyObjCCodable: CustomStringConvertible {
     public var description: String {
@@ -91,7 +91,7 @@ extension AnyObjCCodable: ObjCCodable {
     }
 }
 
-// MARK: - Auxiliary Extensions --
+// MARK: - Auxiliary Extensions-
 
 extension AnyObjCCodable {
     public func _unsafe_cast<T>(to type: T.Type) -> T {

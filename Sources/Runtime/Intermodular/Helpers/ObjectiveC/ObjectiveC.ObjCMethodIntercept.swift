@@ -79,7 +79,7 @@ public final class ObjCMethodInvocationIntercept: ObjCMethodIntercept {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 private let isReadyForInterceptionKey = ObjCAssociationKey<Bool>()
 private let methodSendInterceptsKey = ObjCAssociationKey<[ObjCSelector: Set<ObjCMethodSendIntercept>]>()

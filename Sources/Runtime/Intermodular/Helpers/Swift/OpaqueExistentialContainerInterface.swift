@@ -20,12 +20,18 @@ extension OpaqueExistentialContainerInterface {
         }
     }
     
-    static func withUnsafeBytesOfValue<T>(of value: Any, _ body: ((UnsafeRawBufferPointer) throws -> T)) rethrows -> T {
+    static func withUnsafeBytesOfValue<T>(
+        of value: Any,
+        _ body: ((UnsafeRawBufferPointer) throws -> T)
+    ) rethrows -> T {
         var _value = value as! Self
         return try withUnsafeBytes(of: &_value, body)
     }
     
-    static func withUnsafeMutableBytesOfValue<T>(of value: inout Any, _ body: ((UnsafeMutableRawBufferPointer) throws -> T)) rethrows -> T {
+    static func withUnsafeMutableBytesOfValue<T>(
+        of value: inout Any,
+        _ body: ((UnsafeMutableRawBufferPointer) throws -> T)
+    ) rethrows -> T {
         var _value = value as! Self
         
         defer {
@@ -47,9 +53,9 @@ extension OpaqueExistentialContainerInterface {
         }
     }
     
-    static func assignValue(_ value: Any, to address: UnsafeMutableRawPointer?) {
+    static func update(_ address: UnsafeMutableRawPointer?, to value: Any) {
         if let address = address {
-            address.assumingMemoryBound(to: self).assign(to: value as! Self)
+            address.assumingMemoryBound(to: self).update(to: value as! Self)
         } else {
             assert(TypeMetadata(self).isSizeZero)
         }
@@ -80,10 +86,13 @@ extension OpaqueExistentialContainerInterface {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension OpaqueExistentialContainer {
-    public init<ByteAddress: RawPointer>(copyingBytesOfValueAt address: ByteAddress?, type: TypeMetadata) {
+    public init<ByteAddress: RawPointer>(
+        copyingBytesOfValueAt address: ByteAddress?,
+        type: TypeMetadata
+    ) {
         if type.memoryLayout.size == 0 {
             assert(address == nil)
             
@@ -93,18 +102,29 @@ extension OpaqueExistentialContainer {
         }
     }
     
-    public init<Bytes: RawBufferPointer>(copyingBytesOfValueFrom bytes: Bytes, type: TypeMetadata) {
+    public init<Bytes: RawBufferPointer>(
+        copyingBytesOfValueFrom bytes: Bytes,
+        type: TypeMetadata
+    ) {
         self.init(copyingBytesOfValueAt: bytes.baseAddress, type: type)
     }
     
-    public init(type: TypeMetadata, unsafeBytesOfValueInitializer: (UnsafeMutableRawBufferPointer) -> ()) {
+    public init(
+        type: TypeMetadata,
+        unsafeBytesOfValueInitializer: (UnsafeMutableRawBufferPointer) -> ()
+    ) {
         let bytes = UnsafeMutableRawBufferPointer.allocate(for: type)
+        
         unsafeBytesOfValueInitializer(bytes)
+        
         self.init(copyingBytesOfValueAt: bytes.baseAddress, type: type)
+        
         bytes.deallocate()
     }
     
-    public func assignValue(to address: UnsafeMutableRawPointer?) {
+    public func updateValue(
+        at address: UnsafeMutableRawPointer?
+    ) {
         if let address = address {
             type.opaqueExistentialInterface
                 .initializeValue(at: address, to: unretainedValue)
@@ -115,7 +135,9 @@ extension OpaqueExistentialContainer {
         release()
     }
     
-    public func initializeValue(at address: UnsafeMutableRawPointer?) {
+    public func initializeValue(
+        at address: UnsafeMutableRawPointer?
+    ) {
         if let address = address {
             type.opaqueExistentialInterface
                 .initializeValue(at: address, to: unretainedValue)
@@ -124,7 +146,9 @@ extension OpaqueExistentialContainer {
         }
     }
     
-    public func reintializeValue(at address: UnsafeMutableRawPointer?) {
+    public func reintializeValue(
+        at address: UnsafeMutableRawPointer?
+    ) {
         if let address = address {
             type.opaqueExistentialInterface
                 .reinitializeValue(at: address, to: unretainedValue)
@@ -133,13 +157,17 @@ extension OpaqueExistentialContainer {
         }
     }
     
-    public func withUnsafeBytesOfValue<T>(_ body: ((UnsafeRawBufferPointer) throws -> T)) rethrows -> T {
+    public func withUnsafeBytesOfValue<T>(
+        _ body: ((UnsafeRawBufferPointer) throws -> T)
+    ) rethrows -> T {
         return try type
             .opaqueExistentialInterface
             .withUnsafeBytesOfValue(of: unretainedValue, body)
     }
     
-    public mutating func withUnsafeMutableBytesOfValue<T>(_ body: ((UnsafeMutableRawBufferPointer) throws -> T)) rethrows -> T {
+    public mutating func withUnsafeMutableBytesOfValue<T>(
+        _ body: ((UnsafeMutableRawBufferPointer) throws -> T)
+    ) rethrows -> T {
         return try type
             .opaqueExistentialInterface
             .withUnsafeMutableBytesOfValue(of: &unretainedValue, body)
@@ -182,7 +210,8 @@ extension OpaqueExistentialContainer: UnmanagedProtocol {
     }
     
     public func release() {
-        var value: Any = _compiler_opaque(()) // this (reasonably) assumes Void.Type isn't be heap-allocated
+        var value: Any = _strictlyUnoptimized_passOpaqueExistential(()) // this (reasonably) assumes Void.Type isn't be heap-allocated
+        
         Swift.withUnsafeMutableBytes(of: &value) {
             $0.baseAddress?.assumingMemoryBound(to: Self.self).pointee = self
         }
@@ -202,11 +231,11 @@ extension TypeMetadata {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
-/// This is used to stop the compiler from acting smart.
+/// Prevent the compiler from making any optimizations when passing an opaque existential value.
 @_optimize(none)
 @inline(never)
-private func _compiler_opaque(_ value: Any) -> Any {
+private func _strictlyUnoptimized_passOpaqueExistential(_ value: Any) -> Any {
     return value
 }

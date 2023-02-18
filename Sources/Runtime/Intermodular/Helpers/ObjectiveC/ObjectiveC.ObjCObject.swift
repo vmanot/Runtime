@@ -10,7 +10,7 @@ import Swallow
     
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension ObjCObject {
     public var objCClass: ObjCClass {
@@ -58,7 +58,7 @@ extension ObjCObject {
     }
 }
 
-// MARK: - Auxiliary Extensions -
+// MARK: - Auxiliary Extensions
 
 extension ObjCObject {
     public func keepAlive<T>(_ value: T) {
@@ -66,7 +66,7 @@ extension ObjCObject {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 public func asObjCObject(_ object: AnyObject) -> ObjCObject {
     return unsafeBitCast(object)

@@ -10,7 +10,7 @@ public protocol MetatypeRepresentable {
     func toMetatype() -> Any.Type
 }
 
-// MARK: - Implementation -
+// MARK: - Implementation
 
 extension MetatypeRepresentable {
     public init?(metadata: TypeMetadata) {

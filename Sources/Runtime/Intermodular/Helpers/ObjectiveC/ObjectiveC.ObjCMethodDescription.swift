@@ -41,7 +41,7 @@ extension ObjCMethodDescription {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCMethodDescription: Hashable {
     public func hash(into hasher: inout Hasher) {
@@ -60,7 +60,7 @@ extension ObjCMethodDescription: MutableNamed {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension AnyRandomAccessCollection where Element == ObjCMethodDescription {
     public func filterOutInvalids() -> AnyRandomAccessCollection<ObjCMethodDescription> {

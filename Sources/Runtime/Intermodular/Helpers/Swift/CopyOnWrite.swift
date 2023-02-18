@@ -11,7 +11,7 @@ public protocol CopyOnWrite {
     mutating func ensureIsUniquelyReferenced()
 }
 
-// MARK: - Implementation -
+// MARK: - Implementation
 
 extension CopyOnWrite {
     public mutating func ensureIsUniquelyReferenced() {
@@ -23,7 +23,7 @@ extension CopyOnWrite {
     }
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension CopyOnWrite {
     public mutating func withCopyingIfNeeded<T>(_ closure: ((inout Self) throws -> T)) rethrows -> T {

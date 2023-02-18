@@ -26,7 +26,7 @@ extension ObjCClass {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension ObjCClass: MutableRawRepresentable {
     public typealias RawValue = UnderlyingStructure

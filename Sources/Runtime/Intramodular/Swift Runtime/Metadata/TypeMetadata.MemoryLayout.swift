@@ -14,7 +14,7 @@ extension TypeMetadata {
     }
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension TypeMetadata.MemoryLayout {
     public var size: Int {
@@ -48,7 +48,7 @@ extension TypeMetadata.MemoryLayout {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension TypeMetadata.MemoryLayout: Equatable {
     public static func == (lhs: TypeMetadata.MemoryLayout, rhs: TypeMetadata.MemoryLayout) -> Bool {
@@ -59,7 +59,7 @@ extension TypeMetadata.MemoryLayout: Equatable {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension TypeMetadata {
     public var memoryLayout: TypeMetadata.MemoryLayout {

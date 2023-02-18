@@ -14,7 +14,7 @@ public protocol ObjCCodable {
     func deinitializeRawObjCValueBuffer(_: UnsafeMutableRawPointer)
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCCodable {
     public func deinitializeRawObjCValueBuffer(_: UnsafeMutableRawPointer) {
@@ -44,7 +44,7 @@ extension Trivial where Self: ObjCCodable {
     }
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension ObjCCodable {
     public func withUnsafeRawObjCValueBuffer<Result>(_ body: ((UnsafeMutableRawPointer) throws -> Result)) rethrows -> Result {

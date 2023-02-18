@@ -44,7 +44,7 @@ extension ObjCMethodInvocation {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension ObjCObject {
     public func invokeSelector(_ selector: ObjCSelector, with arguments: [AnyObjCCodable]) throws -> AnyObjCCodable {

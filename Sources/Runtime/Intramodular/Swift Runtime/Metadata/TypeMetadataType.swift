@@ -23,7 +23,7 @@ public protocol NominalTypeMetadataType: CustomStringConvertible, TypeMetadataTy
     var fields: [NominalTypeMetadata.Field] { get }
 }
 
-// MARK: - Implementation -
+// MARK: - Implementation
 
 extension CustomStringConvertible where Self: TypeMetadataType {
     public var description: String {
@@ -67,7 +67,7 @@ extension NominalTypeMetadataType {
     }
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension TypeMetadataType {
     public var isSwiftObject: Bool {

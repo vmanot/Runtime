@@ -15,7 +15,7 @@ public struct ObjCProtocol: CustomStringConvertible, ExpressibleByStringLiteral,
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCProtocol: CaseIterable {
     public static var allCases: AnyRandomAccessCollection<ObjCProtocol> {
@@ -248,7 +248,7 @@ extension ObjCProtocol: Sequence {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension ObjCClass {
     public func inheritedMethodDescription(for selector: ObjCSelector) throws -> ObjCMethodDescription {

@@ -27,7 +27,7 @@ import Swallow
 
 let NSInvocationType = unsafeBitCast(ObjCClass(name: "NSInvocation"), to: NSInvocationProtocol.Type.self)
 
-// MARK: - Auxiliary Extensions -
+// MARK: - Auxiliary Extensions
 
 extension NSInvocationProtocol {
     public func invoke(using implementation: ObjCVirtualMethodImplementation) {
@@ -47,7 +47,7 @@ extension NSInvocationProtocol {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension ObjCCodable {
     public init(_returnValueFromInvocation invocation: NSInvocationProtocol) {

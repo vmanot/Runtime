@@ -30,7 +30,7 @@ extension TypeMetadata {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension TypeMetadata {
     public init<C: Collection>(

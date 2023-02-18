@@ -46,7 +46,7 @@ extension ObjCImplementation {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension ObjCMethod {
     public var implementation: ObjCImplementation {

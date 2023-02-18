@@ -57,7 +57,7 @@ extension ObjCMethod {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCMethod: Hashable {
     public func hash(into hasher: inout Hasher) {

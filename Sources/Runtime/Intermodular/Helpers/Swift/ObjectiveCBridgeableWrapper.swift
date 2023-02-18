@@ -10,7 +10,7 @@ public protocol ObjectiveCBridgeableWrapper: _ObjectiveCBridgeable, Wrapper {
     init(_: _ObjectiveCType)
 }
 
-// MARK: - Implementation -
+// MARK: - Implementation
 
 extension ObjectiveCBridgeableWrapper {
     public func _bridgeToObjectiveC() -> _ObjectiveCType {

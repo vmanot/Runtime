@@ -15,7 +15,7 @@ public struct ObjCPropertyAttributeKeyValuePair: CustomStringConvertible, Wrappe
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCPropertyAttributeKeyValuePair: Hashable {
     public func hash(into hasher: inout Hasher) {

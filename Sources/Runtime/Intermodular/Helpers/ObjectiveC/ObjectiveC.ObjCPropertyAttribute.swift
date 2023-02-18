@@ -96,7 +96,7 @@ extension ObjCPropertyAttribute {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCPropertyAttribute: CustomDebugStringConvertible {
     public var debugDescription: String {

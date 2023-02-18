@@ -29,7 +29,7 @@ extension ObjCProperty {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCProperty: Named {
     public var name: String {

@@ -14,7 +14,7 @@ public struct CopyOnWriteObjectWrapper<T: AnyObject> {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension CopyOnWriteObjectWrapper: CopyOnWrite {
     public var isUniquelyReferenced: Bool {

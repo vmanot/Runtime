@@ -95,7 +95,7 @@ extension TypeMetadata {
     }
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension TypeMetadata {
     public var kind: TypeMetadata.Kind {

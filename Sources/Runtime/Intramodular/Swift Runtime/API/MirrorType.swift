@@ -10,7 +10,7 @@ public protocol MirrorType {
     var supertypeMirror: SupertypeMirror? { get }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension Mirror: MirrorType {
     public var supertypeMirror: Mirror? {

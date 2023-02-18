@@ -43,7 +43,7 @@ public struct AnyNominalOrTupleMirror: MirrorType, FailableWrapper {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension AnyNominalOrTupleMirror: CustomStringConvertible {
     public var description: String {

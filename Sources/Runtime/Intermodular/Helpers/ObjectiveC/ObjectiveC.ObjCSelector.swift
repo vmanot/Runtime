@@ -13,7 +13,7 @@ public struct ObjCSelector: Trivial {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCSelector: CustomStringConvertible {
     public var description: String {
@@ -73,14 +73,14 @@ extension ObjCSelector: RawRepresentable {
     }
 }
 
-// MARK: - Auxiliary Extensions -
+// MARK: - Auxiliary Extensions
 
 extension ObjCSelector {
     static let forwardInvocation: ObjCSelector = "forwardInvocation:"
     static let preserved_forwardInvocation: ObjCSelector = "preserved_forwardInvocation:"
 }
 
-// MARK: - Helpers -
+// MARK: - Helpers
 
 extension DictionaryProtocol where DictionaryKey == ObjCSelector {
     public subscript(_ key: Selector) -> DictionaryValue? {

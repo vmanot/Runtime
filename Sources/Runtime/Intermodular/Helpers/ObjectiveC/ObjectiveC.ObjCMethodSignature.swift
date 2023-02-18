@@ -13,7 +13,7 @@ public struct ObjCMethodSignature: Codable, Hashable, RawRepresentable {
     }
 }
 
-// MARK: - Extensions -
+// MARK: - Extensions
 
 extension ObjCMethodSignature {
     public var returnType: ObjCTypeEncoding {
@@ -39,7 +39,7 @@ extension ObjCMethodSignature {
     }
 }
 
-// MARK: - Conformances -
+// MARK: - Conformances
 
 extension ObjCMethodSignature: CustomStringConvertible {
     public var description: String {
