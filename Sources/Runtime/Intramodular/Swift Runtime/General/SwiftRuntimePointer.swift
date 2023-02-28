@@ -35,13 +35,12 @@ public struct SwiftRuntimeUnsafeRelativeVectorPointer<Offset: BinaryInteger, Poi
     @_optimize(none)
     @_transparent
     public mutating func vector<N: BinaryInteger>(metadata: UnsafePointer<Int>, count: N) -> [Pointee] {
-        return .init(
-            metadata
-                .advanced(by: numericCast(offset))
-                .rawRepresentation
-                .assumingMemoryBound(to: Pointee.self)
-                .buffer(withCount: Int(count))
-        )
+        let baseAddress = metadata
+            .advanced(by: numericCast(offset))
+            .rawRepresentation
+            .assumingMemoryBound(to: Pointee.self)
+        
+        return Array(UnsafeBufferPointer(start: baseAddress, count: count))
     }
 }
 
@@ -51,7 +50,7 @@ public struct SwiftRuntimeUnsafeRelativeVector<Element> {
     public mutating func vector<Integer: BinaryInteger>(count: Integer) -> [Element] {
         return withUnsafePointer(to: &self) {
             $0.withMemoryRebound(to: Element.self, capacity: 1) { start in
-                return Array(start.buffer(withCount: count))
+                Array(UnsafeBufferPointer(start: start, count: count))
             }
         }
     }
