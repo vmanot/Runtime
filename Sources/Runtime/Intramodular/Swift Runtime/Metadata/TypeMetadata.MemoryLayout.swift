@@ -30,7 +30,7 @@ extension TypeMetadata.MemoryLayout {
     public var stride: Int {
         return typeMetadata.valueWitnessTable.pointee.stride
     }
-
+    
     public static func stride(ofValue value: Any) -> Int {
         return OpaqueExistentialContainer.withUnretainedValue(value) {
             $0.type.memoryLayout.stride
@@ -63,15 +63,15 @@ extension TypeMetadata.MemoryLayout: Equatable {
 
 extension TypeMetadata {
     public var memoryLayout: TypeMetadata.MemoryLayout {
-        return .init(base)
+        .init(base)
     }
-
+    
     public var isSizeZero: Bool {
-        return memoryLayout.size == 0
+        memoryLayout.size == 0
     }
-
+    
     public var byteTupleRepresentation: TypeMetadata {
-        return TypeMetadata(tupleWithTypes: Array<Any.Type>(repeating: Byte.self, count: memoryLayout.size))
+        TypeMetadata(tupleWithTypes: Array<Any.Type>(repeating: Byte.self, count: memoryLayout.size))
     }
 }
 

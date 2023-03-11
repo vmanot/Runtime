@@ -17,12 +17,14 @@ public class EncoderNSCodingAdaptor: NSCoder {
 
 extension EncoderNSCodingAdaptor {
     override open func encodeValue(ofObjCType type: UnsafePointer<Int8>, at addr: UnsafeRawPointer) {
-        try! base.encode(opaque: Data(from: NSValue(bytes: addr, objCType: type)))
+        var container = base.singleValueContainer()
+        
+        try! container.encode(Data(from: NSValue(bytes: addr, objCType: type)))
     }
     
     override open func encode(_ object: Any?, forKey key: String) {
         if let object = object as? Encodable {
-            try! base.encode(opaque: object, forKey: AnyStringKey(stringValue: key))
+            try! base.encode(object, forKey: AnyStringKey(stringValue: key))
         } else if let object = object as? (NSObject & NSSecureCoding) {
             try! base.encode(NSCodingToEncodable(base: object), forKey: AnyStringKey(stringValue: key))
             try! base.encode(NSStringFromClass(type(of: object)), forKey: AnyStringKey(stringValue: key + EncoderNSCodingAdaptor.classKeySuffix))
