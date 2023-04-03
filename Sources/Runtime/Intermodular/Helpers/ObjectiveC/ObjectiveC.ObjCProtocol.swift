@@ -145,10 +145,9 @@ extension ObjCProtocol: Sequence {
     }
 
     public var allInstanceMethods: AnyRandomAccessCollection<ObjCMethodDescription> {
-        return .init(EmptyCollection()
-            .join(instanceMethods)
-            .join(optionalInstanceMethods)
-        )
+        Array(instanceMethods)
+            .appending(contentsOf: optionalInstanceMethods)
+            .eraseToAnyRandomAccessCollection()
     }
 
     public var classMethods: AnyRandomAccessCollection<ObjCMethodDescription> {
@@ -163,6 +162,7 @@ extension ObjCProtocol: Sequence {
         return .init(EmptyCollection()
             .join(classMethods)
             .join(optionalClassMethods)
+            .toFauxCollection()
         )
     }
 
@@ -172,6 +172,7 @@ extension ObjCProtocol: Sequence {
             .join(optionalClassMethods)
             .join(instanceMethods)
             .join(classMethods)
+            .toFauxCollection()
         )
     }
     
@@ -180,23 +181,23 @@ extension ObjCProtocol: Sequence {
     }
     
     public var classProperties: AnyRandomAccessCollection<ObjCProperty> {
-        return protocol_realizeListAllocator(value, with: { protocol_copyPropertyList2($0, $1, $2, $3) }, (true, false))
+        protocol_realizeListAllocator(value, with: { protocol_copyPropertyList2($0, $1, $2, $3) }, (true, false))
     }
     
     public var optionalInstanceProperties: AnyRandomAccessCollection<ObjCProperty> {
-        return protocol_realizeListAllocator(value, with: { protocol_copyPropertyList2($0, $1, $2, $3) }, (false, true))
+        protocol_realizeListAllocator(value, with: { protocol_copyPropertyList2($0, $1, $2, $3) }, (false, true))
     }
     
     public var optionalClassProperties: AnyRandomAccessCollection<ObjCProperty> {
-        return protocol_realizeListAllocator(value, with: { protocol_copyPropertyList2($0, $1, $2, $3) }, (false, false))
+        protocol_realizeListAllocator(value, with: { protocol_copyPropertyList2($0, $1, $2, $3) }, (false, false))
     }
     
     public var allProperties: AnyRandomAccessCollection<ObjCProperty> {
-        return objc_realizeListAllocator({ protocol_copyPropertyList($0, $1) }, value)
+        objc_realizeListAllocator({ protocol_copyPropertyList($0, $1) }, value)
     }
 
     public var adoptedProtocols: AnyRandomAccessCollection<ObjCProtocol> {
-        return objc_realizeListAllocator({ protocol_copyProtocolList($0, $1) }, value)
+        objc_realizeListAllocator({ protocol_copyProtocolList($0, $1) }, value)
     }
     
     public var randomAccessCollectionView: RandomAccessCollectionView {
@@ -240,6 +241,7 @@ extension ObjCProtocol: Sequence {
             .join(optionalInstanceProperties)
             .join(optionalClassProperties)
             .join(adoptedProtocols)
+            .toFauxCollection()
         )
     }
     

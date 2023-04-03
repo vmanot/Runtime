@@ -342,7 +342,7 @@ extension ObjCClass: Sequence {
         let properties = self.properties.lazy.map(ObjCClassItem.init)
         let protocols = self.protocols.lazy.map(ObjCClassItem.init)
         
-        return .init(instanceVariables.join(methods).join(properties).join(protocols))
+        return .init(Array(instanceVariables.join(methods).join(properties).join(protocols)))
     }
     
     public func makeIterator() -> Iterator {

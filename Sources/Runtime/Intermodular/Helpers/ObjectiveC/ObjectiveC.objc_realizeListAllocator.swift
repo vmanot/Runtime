@@ -16,7 +16,9 @@ func objc_realizeListAllocator<T: Wrapper, P: Pointer>(
         count: count,
         isAutodeallocating: true
     )
-    ._map(T.init)
+    .lazy
+    .map(T.init)
+    .eraseToAnyRandomAccessCollection()
 }
 
 func objc_realizeListAllocator<T: Wrapper, P: Pointer>(
@@ -30,8 +32,10 @@ func objc_realizeListAllocator<T: Wrapper, P: Pointer>(
         count: count,
         isAutodeallocating: true
     )
-    .compact()
-    ._map(T.init)
+    .lazy
+    .compactMap({ $0 })
+    .map(T.init)
+    .eraseToAnyRandomAccessCollection()
 }
 
 func objc_realizeListAllocator<T, U: Wrapper, P: Pointer>(
@@ -46,7 +50,10 @@ func objc_realizeListAllocator<T, U: Wrapper, P: Pointer>(
         count: count,
         isAutodeallocating: true
     )
-    ._map(U.init)
+    .lazy
+    .compactMap({ $0 })
+    .map(U.init)
+    .eraseToAnyRandomAccessCollection()
 }
 
 func objc_realizeListAllocator<T, U: Wrapper, P: Pointer>(
@@ -61,7 +68,8 @@ func objc_realizeListAllocator<T, U: Wrapper, P: Pointer>(
         count: count,
         isAutodeallocating: true
     )
-    ._map(U.init)
+    .map(U.init)
+    .eraseToAnyRandomAccessCollection()
 }
 
 func objc_realizeListAllocator<T, U: Wrapper, P: Pointer>(
@@ -76,8 +84,10 @@ func objc_realizeListAllocator<T, U: Wrapper, P: Pointer>(
         count: count,
         isAutodeallocating: true
     )
-    .compact()
-    ._map(U.init)
+    .lazy
+    .compactMap({ $0 })
+    .map(U.init)
+    .eraseToAnyRandomAccessCollection()
 }
 
 func objc_realizeListAllocator<T, U: Wrapper, P: Pointer>(
@@ -92,6 +102,8 @@ func objc_realizeListAllocator<T, U: Wrapper, P: Pointer>(
         count: count,
         isAutodeallocating: true
     )
-    .compact()
-    ._map(U.init)
+    .lazy
+    .compactMap({ $0 })
+    .map(U.init)
+    .eraseToAnyRandomAccessCollection()
 }
