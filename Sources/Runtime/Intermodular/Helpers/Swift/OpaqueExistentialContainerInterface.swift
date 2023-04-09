@@ -239,14 +239,3 @@ extension TypeMetadata {
 private func _strictlyUnoptimized_passOpaqueExistential(_ value: Any) -> Any {
     return value
 }
-
-public func _isValueOfGivenType<Value>(
-    _ value: Value,
-    type: Any.Type
-) -> Bool {
-    func check<T>(_ type: T.Type) -> Bool {
-        value is T
-    }
-    
-    return _openExistential(type, do: check)
-}
