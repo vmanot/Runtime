@@ -119,7 +119,7 @@ extension OpaqueExistentialContainer: ObjCCodable {
         } else if let value = takeUnretainedValue() as? ObjCCodable {
             return value.encodeObjCValueToRawBuffer()
         } else {
-            return createRawCopy().baseAddress!
+            return withUnsafeBytes({ UnsafeMutableRawBufferPointer.initializing(from: $0) }).baseAddress!
         }
     }
     

@@ -23,7 +23,7 @@ extension ObjCProtocol: CaseIterable {
     }
 }
 
-extension ObjCProtocol: ExtensibleSequence {
+extension ObjCProtocol {
     public func insert(instanceMethod method: ObjCMethodDescription) {
         protocol_addMethodDescription(value, Selector(method.name), method.signature.rawValue, true, true)
     }
@@ -67,35 +67,6 @@ extension ObjCProtocol: ExtensibleSequence {
         
         protocol_addProperty(value, property.name, attributes, .init(attributes.count), false, false)
     }
-    
-    public func insert(_ element: Element) {
-        switch element {
-            case .instanceMethod(let value):
-                insert(instanceMethod: value)
-            case .classMethod(let value):
-                insert(classMethod: value)
-            case .optionalInstanceMethod(let value):
-                insert(optionalInstanceMethod: value)
-            case .optionalClassMethod(let value):
-                insert(optionalClassMethod: value)
-                
-            case .instanceProperty(let value):
-                insert(instanceProperty: value)
-            case .classProperty(let value):
-                insert(classProperty: value)
-            case .optionalInstanceProperty(let value):
-                insert(optionalInstanceProperty: value)
-            case .optionalClassProperty(let value):
-                insert(optionalClassProperty: value)
-                
-            case .adoptedProtocol(let value):
-                insert(adoptedProtocol: value)
-        }
-    }
-    
-    public func append(_ element: Element) {
-        insert(element)
-    }
 }
 
 extension ObjCProtocol: Equatable {
@@ -132,10 +103,7 @@ extension ObjCProtocol: ObjCRegistree {
     }
 }
 
-extension ObjCProtocol: Sequence {
-    public typealias Iterator = RandomAccessCollectionView.Iterator
-    public typealias RandomAccessCollectionView = AnyRandomAccessCollection<ObjCProtocolItem>
-
+extension ObjCProtocol {
     public var instanceMethods: AnyRandomAccessCollection<ObjCMethodDescription> {
         return protocol_realizeListAllocator(value, with: { protocol_copyMethodDescriptionList($0, $1, $2, $3) }, (true, true)).filterOutInvalids()
     }
@@ -158,24 +126,6 @@ extension ObjCProtocol: Sequence {
         return protocol_realizeListAllocator(value, with: { protocol_copyMethodDescriptionList($0, $1, $2, $3) }, (false, false)).filterOutInvalids()
     }
 
-    public var allClassMethods: AnyRandomAccessCollection<ObjCMethodDescription> {
-        return .init(EmptyCollection()
-            .join(classMethods)
-            .join(optionalClassMethods)
-            .toFauxCollection()
-        )
-    }
-
-    public var allMethods: AnyRandomAccessCollection<ObjCMethodDescription> {
-        return .init(EmptyCollection()
-            .join(optionalInstanceMethods)
-            .join(optionalClassMethods)
-            .join(instanceMethods)
-            .join(classMethods)
-            .toFauxCollection()
-        )
-    }
-    
     public var instanceProperties: AnyRandomAccessCollection<ObjCProperty> {
         return protocol_realizeListAllocator(value, with: { protocol_copyPropertyList2($0, $1, $2, $3) }, (true, true))
     }
@@ -198,55 +148,6 @@ extension ObjCProtocol: Sequence {
 
     public var adoptedProtocols: AnyRandomAccessCollection<ObjCProtocol> {
         objc_realizeListAllocator({ protocol_copyProtocolList($0, $1) }, value)
-    }
-    
-    public var randomAccessCollectionView: RandomAccessCollectionView {
-        let instanceMethods = self.instanceMethods
-            .lazy
-            .map(ObjCProtocolItem.instanceMethod)
-        let classMethods = self.instanceMethods
-            .lazy
-            .map(ObjCProtocolItem.classMethod)
-        let optionalInstanceMethods = self.optionalInstanceMethods
-            .lazy
-            .map(ObjCProtocolItem.optionalInstanceMethod)
-        let optionalClassMethods = self.optionalInstanceMethods
-            .lazy
-            .map(ObjCProtocolItem.optionalClassMethod)
-
-        let instanceProperties = self.instanceProperties
-            .lazy
-            .map(ObjCProtocolItem.instanceProperty)
-        let classProperties = self.classProperties
-            .lazy
-            .map(ObjCProtocolItem.classProperty)
-        let optionalInstanceProperties = self.optionalInstanceProperties
-            .lazy
-            .map(ObjCProtocolItem.optionalInstanceProperty)
-        let optionalClassProperties = self.optionalClassProperties
-            .lazy
-            .map(ObjCProtocolItem.optionalClassProperty)
-
-        let adoptedProtocols = self.adoptedProtocols
-            .lazy
-            .map(ObjCProtocolItem.adoptedProtocol)
-
-        return .init(EmptyCollection()
-            .join(instanceMethods)
-            .join(classMethods)
-            .join(optionalInstanceMethods)
-            .join(optionalClassMethods)
-            .join(instanceProperties)
-            .join(classProperties)
-            .join(optionalInstanceProperties)
-            .join(optionalClassProperties)
-            .join(adoptedProtocols)
-            .toFauxCollection()
-        )
-    }
-    
-    public func makeIterator() -> Iterator {
-        return randomAccessCollectionView.makeIterator()
     }
 }
 

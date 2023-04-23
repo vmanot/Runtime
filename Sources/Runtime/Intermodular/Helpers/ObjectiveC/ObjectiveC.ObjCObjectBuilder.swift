@@ -23,11 +23,23 @@ extension ObjCObjectBuilder {
 }
 
 extension ObjCObjectBuilder {
-    public func implement(method selector: ObjCSelector, _ implementation: ObjCImplementation) throws {
-        try pseudoHeader.allMethods.find({ $0.name == selector.rawValue }).map({ try builtClass.insert($0, implementation) })
+    public func implement(
+        method selector: ObjCSelector,
+        _ implementation: ObjCImplementation
+    ) throws {
+        try pseudoHeader.allInstanceMethods
+            .find({ $0.name == selector.rawValue })
+            .map({ try builtClass.insert($0, implementation) })
+            .unwrap()
     }
     
-    public func reimplement(method selector: ObjCSelector, _ implementation: ObjCImplementation) throws {
-        _ = try pseudoHeader.allMethods.find({ $0.name == selector.rawValue }).map({ try builtClass.replace($0, with: implementation) })
+    public func reimplement(
+        method selector: ObjCSelector,
+        _ implementation: ObjCImplementation
+    ) throws {
+        _ = try pseudoHeader.allInstanceMethods
+            .find({ $0.name == selector.rawValue })
+            .map({ try builtClass.replace($0, with: implementation) })
+            .unwrap()
     }
 }

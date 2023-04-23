@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.7
 
 import PackageDescription
 
@@ -11,12 +11,18 @@ let package = Package(
         .watchOS(.v6)
     ],
     products: [
-        .library(name: "Runtime", targets: ["RuntimeShims", "Runtime"])
+        .library(
+            name: "Runtime",
+            targets: [
+                "RuntimeShims",
+                "Runtime"
+            ]
+        )
     ],
     dependencies: [
-        .package(url: "https://github.com/vmanot/Compute.git", .branch("master")),
-        .package(url: "https://github.com/vmanot/FoundationX.git", .branch("master")),
-        .package(url: "https://github.com/vmanot/Swallow.git", .branch("master"))
+        .package(url: "https://github.com/vmanot/Compute.git", branch: "master"),
+        .package(url: "https://github.com/vmanot/FoundationX.git", branch: "master"),
+        .package(url: "https://github.com/vmanot/Swallow.git", branch: "master")
     ],
     targets: [
         .target(
