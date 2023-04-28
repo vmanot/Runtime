@@ -87,7 +87,7 @@ extension UnsafeRawPointer: ObjCTypeEncodable {
     
 }
 
-extension TrivialRepresentationOf: ObjCTypeEncodable {
+extension _UnsafeTrivialRepresentationOf: ObjCTypeEncodable {
     public static var objCTypeEncoding: ObjCTypeEncoding {
         return ObjCTypeEncoding(metatype: Value.self) ?? .unknown
     }

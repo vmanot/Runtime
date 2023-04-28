@@ -82,6 +82,8 @@ extension AnyNominalOrTupleMirror: KeyExposingMutableDictionaryProtocol {
                 }
             }
         } set {
+            assert(type(of: newValue) == field.type.base)
+
             OpaqueExistentialContainer.withUnretainedValue(&value) {
                 $0.withUnsafeMutableBytes { bytes in
                     field.type.opaqueExistentialInterface.reinitializeValue(

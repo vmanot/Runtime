@@ -5,7 +5,7 @@
 import Swallow
 
 extension ObjCClass {
-    public struct UnderlyingStructure: Trivial {
+    public struct UnderlyingStructure: Trivial, @unchecked Sendable {
         public let metaClass: ObjCClass?
         public let superclass: ObjCClass?
         public let cacheData: (UnsafeRawPointer?, UnsafeRawPointer?)

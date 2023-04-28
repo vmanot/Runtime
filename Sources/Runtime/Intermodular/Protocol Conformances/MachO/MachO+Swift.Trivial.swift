@@ -5,7 +5,7 @@
 import MachO
 import Swallow
 
-extension NXArchInfo: Trivial {
+extension NXArchInfo: Trivial, @unchecked Sendable {
     
 }
  
