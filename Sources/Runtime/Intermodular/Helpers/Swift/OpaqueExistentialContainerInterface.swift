@@ -230,12 +230,3 @@ extension TypeMetadata {
         return unsafeBitCast(container, to: OpaqueExistentialContainerInterface.Type.self)
     }
 }
-
-// MARK: - Helpers
-
-/// Prevent the compiler from making any optimizations when passing an opaque existential value.
-@_optimize(none)
-@inline(never)
-private func _strictlyUnoptimized_passOpaqueExistential(_ value: Any) -> Any {
-    return value
-}
