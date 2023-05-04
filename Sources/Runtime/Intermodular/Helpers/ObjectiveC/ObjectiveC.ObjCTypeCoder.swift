@@ -12,7 +12,9 @@ public struct ObjCTypeCoder {
 }
 
 extension ObjCTypeCoder {
-    public static func encode(possibleClass type: Any.Type) -> ObjCTypeEncoding? {
+    public static func encode(
+        possibleClass type: Any.Type
+    ) -> ObjCTypeEncoding? {
         switch TypeMetadata(type).kind {
             case .class, .foreignClass, .objCClassWrapper:
                 return ObjCTypeEncoding("@")
@@ -23,8 +25,10 @@ extension ObjCTypeCoder {
                 return nil
         }
     }
-
-    public static func encode(possibleSimple type: Any.Type) -> ObjCTypeEncoding? {
+    
+    public static func encode(
+        possibleSimple type: Any.Type
+    ) -> ObjCTypeEncoding? {
         switch type {
             case AnyObject.self:
                 return ObjCTypeEncoding("@")
@@ -34,7 +38,7 @@ extension ObjCTypeCoder {
                 return ObjCTypeEncoding("v")
                 
             default:
-                    return nil
+                return nil
         }
     }
     
@@ -52,7 +56,7 @@ extension ObjCTypeCoder {
         } else if let result = encode(possibleStructure: type) {
             return result
         }
-
+        
         return nil
     }
     
@@ -135,7 +139,7 @@ extension ObjCTypeCoder {
                 return Selector.self
             case "?":
                 fallthrough
-
+                
             case "{_NSRange=QQ}":
                 return NSRange.self
                 
@@ -203,7 +207,7 @@ extension ObjCTypeCoder {
             if let unitValue = encoding.leftValue {
                 return rule.process(decode(atom: unitValue))
             }
-                
+            
             else {
                 return rule.process(encoding.map({ decode(.init($0)) }))
             }
@@ -214,7 +218,7 @@ extension ObjCTypeCoder {
     
     public static func decode(parsing encoding: ObjCTypeEncoding) -> Any.Type? {
         var parser = SequenceParser<String>()
-
+        
         parser.insert(prefix: "{", suffix: "}")
         parser.insert(prefix: "(", suffix: ")")
         parser.insert(token: "^")
