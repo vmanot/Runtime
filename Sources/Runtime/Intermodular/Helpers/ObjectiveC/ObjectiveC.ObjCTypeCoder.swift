@@ -150,11 +150,19 @@ extension ObjCTypeCoder {
 }
 
 extension ObjCTypeCoder {
-    public static var rules: [ObjCTypeContainerDecoderRule.Type] = [ObjCTypeContainerDecoderRuleForConstantPointer.self, ObjCTypeContainerDecoderRuleForPointer.self, ObjCTypeContainerDecoderRuleForStructure.self, ObjCTypeContainerDecoderRuleForUnion.self]
+    public static var rules: [ObjCTypeContainerDecoderRule.Type] = [
+        ObjCTypeContainerDecoderRuleForConstantPointer.self,
+        ObjCTypeContainerDecoderRuleForPointer.self,
+        ObjCTypeContainerDecoderRuleForStructure.self,
+        ObjCTypeContainerDecoderRuleForUnion.self
+    ]
     
     public static func decode(atom encoding: String) -> [Any.Type] {
         if encoding.contains("b") {
-            let sizeInBits = encoding.replacing("b", with: "").map({ Int(String($0))! }).reduce(0, +)
+            let sizeInBits = encoding
+                .replacingOccurrences(of: "b", with: "")
+                .map({ Int(String($0))! })
+                .reduce(0, +)
             
             return Array<Any.Type>(repeating: Byte.self, count: sizeInBits / 8)
         }
